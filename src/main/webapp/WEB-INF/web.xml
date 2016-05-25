@@ -4,7 +4,7 @@
 	xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd"
 	id="maven_web" version="3.0">
 	
-	<display-name>maven_web v1.0</display-name>
+	<display-name>sxb_web v1.0</display-name>
 	
 	<!-- 字符编码设置 -->
 	<filter>
