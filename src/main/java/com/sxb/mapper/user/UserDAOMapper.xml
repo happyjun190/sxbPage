@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.sxb.dao.user.UserDAO">
+
+	<!-- 获取用户登陆信息 -->
+	<select id="getUserInfo" resultType="com.sxb.model.user.TabUser">
+		select id,login,password,phone,email,state,ctime,mtime
+		from ts_user where login = #{login}
+	</select>
+	
+</mapper>

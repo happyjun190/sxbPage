@@ -1,0 +1,408 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <groupId>com.sxb</groupId>
+  <artifactId>sxb</artifactId>
+  <packaging>war</packaging>
+  <name>sxb</name>
+  <version>1.0</version>
+  <url>http://maven.apache.org</url>
+  
+  <!-- 版本设置 -->
+  <properties>
+  	<mysql.connector.version>5.1.32</mysql.connector.version>
+  	<org.springframework.version>4.0.9.RELEASE</org.springframework.version>
+  	<mybatis.version>3.3.0</mybatis.version>
+	<log4j.version>2.5</log4j.version>
+	<slf4j.version>1.7.13</slf4j.version>
+  	<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+  </properties>
+  
+  <!-- 依赖包 -->
+  <dependencies>
+  	
+  	<!-- spring framework config start 20160108-->
+  
+  	<!--
+    Core utilities used by other modules.
+    Define this if you use Spring Utility APIs (org.springframework.core.*/org.springframework.util.*)
+	-->
+	<dependency>
+	  <groupId>org.springframework</groupId>
+	  <artifactId>spring-core</artifactId>
+	  <version>${org.springframework.version}</version>
+	</dependency>
+        
+	<!--
+	    Expression Language (depends on spring-core)
+	    Define this if you use Spring Expression APIs (org.springframework.expression.*)
+	<dependency>
+	  <groupId>org.springframework</groupId>
+	  <artifactId>spring-expression</artifactId>
+	  <version>${org.springframework.version}</version>
+	</dependency>
+	-->
+	<!-- 
+	    Bean Factory and JavaBeans utilities (depends on spring-core)
+	    Define this if you use Spring Bean APIs (org.springframework.beans.*) 
+	-->
+	<dependency>
+	  <groupId>org.springframework</groupId>
+	  <artifactId>spring-beans</artifactId>
+	  <version>${org.springframework.version}</version>
+	</dependency>
+	
+	<!--
+	    Aspect Oriented Programming (AOP) Framework (depends on spring-core, spring-beans)
+	    Define this if you use Spring AOP APIs (org.springframework.aop.*)
+	-->
+	<dependency>
+	  <groupId>org.springframework</groupId>
+	  <artifactId>spring-aop</artifactId>
+	  <version>${org.springframework.version}</version>
+	</dependency>
+	
+	<!--
+	    Application Context (depends on spring-core, spring-expression, spring-aop, spring-beans) 
+	    This is the central artifact for Spring's Dependency Injection Container and is generally always defined
+	-->
+	<dependency>
+	  <groupId>org.springframework</groupId>
+	  <artifactId>spring-context</artifactId>
+	  <version>${org.springframework.version}</version>
+	</dependency>
+	
+	<!--
+	    Various Application Context utilities, including EhCache, JavaMail, Quartz, and Freemarker integration
+	    Define this if you need any of these integrations
+	-->
+	<dependency>
+	  <groupId>org.springframework</groupId>
+	  <artifactId>spring-context-support</artifactId>
+	  <version>${org.springframework.version}</version>
+	</dependency>
+	
+	<!--
+	    Transaction Management Abstraction (depends on spring-core, spring-beans, spring-aop, spring-context)
+	    Define this if you use Spring Transactions or DAO Exception Hierarchy
+	    (org.springframework.transaction.*/org.springframework.dao.*)
+	-->
+	<dependency>
+	  <groupId>org.springframework</groupId>
+	  <artifactId>spring-tx</artifactId>
+	  <version>${org.springframework.version}</version>
+	</dependency>
+	
+	<!--
+	    JDBC Data Access Library (depends on spring-core, spring-beans, spring-context, spring-tx)
+	    Define this if you use Spring's JdbcTemplate API (org.springframework.jdbc.*)
+	-->
+	<dependency>
+	  <groupId>org.springframework</groupId>
+	  <artifactId>spring-jdbc</artifactId>
+	  <version>${org.springframework.version}</version>
+	</dependency>
+	
+	<!--
+	    Object-to-Relation-Mapping (ORM) integration with Hibernate, JPA, and iBatis.
+	    (depends on spring-core, spring-beans, spring-context, spring-tx)
+	    Define this if you need ORM (org.springframework.orm.*)
+	-->
+	<dependency>
+	  <groupId>org.springframework</groupId>
+	  <artifactId>spring-orm</artifactId>
+	  <version>${org.springframework.version}</version>
+	</dependency>
+	
+	<!--
+	    Object-to-XML Mapping (OXM) abstraction and integration with JAXB, JiBX, Castor, XStream, and XML Beans.
+	    (depends on spring-core, spring-beans, spring-context)
+	    Define this if you need OXM (org.springframework.oxm.*)
+	<dependency>
+	  <groupId>org.springframework</groupId>
+	  <artifactId>spring-oxm</artifactId>
+	  <version>${org.springframework.version}</version>
+	</dependency>
+	-->
+	<!--
+	    Web application development utilities applicable to both Servlet and Portlet Environments
+	    (depends on spring-core, spring-beans, spring-context)
+	    Define this if you use Spring MVC, or wish to use Struts, JSF, or another web framework with Spring (org.springframework.web.*)
+	-->
+	<dependency>
+	  <groupId>org.springframework</groupId>
+	  <artifactId>spring-web</artifactId>
+	  <version>${org.springframework.version}</version>
+	</dependency>
+	
+	<!--
+	    Spring MVC for Servlet Environments (depends on spring-core, spring-beans, spring-context, spring-web)
+	    Define this if you use Spring MVC with a Servlet Container such as Apache Tomcat (org.springframework.web.servlet.*)
+	-->
+	<dependency>
+	  <groupId>org.springframework</groupId>
+	  <artifactId>spring-webmvc</artifactId>
+	  <version>${org.springframework.version}</version>
+	</dependency>
+	
+	<!--
+	    Spring MVC for Portlet Environments (depends on spring-core, spring-beans, spring-context, spring-web)
+	    Define this if you use Spring MVC with a Portlet Container (org.springframework.web.portlet.*)
+	<dependency>
+	  <groupId>org.springframework</groupId>
+	  <artifactId>spring-webmvc-portlet</artifactId>
+	  <version>${org.springframework.version}</version>
+	</dependency>
+	-->
+	<!--
+	    Support for testing Spring applications with tools such as JUnit and TestNG
+	    This artifact is generally always defined with a 'test' scope for the integration testing framework and unit testing stubs
+	-->
+	<dependency>
+	  <groupId>org.springframework</groupId>
+	  <artifactId>spring-test</artifactId>
+	  <version>${org.springframework.version}</version>
+	  <scope>test</scope>
+	</dependency>
+	<!-- spring framework config end 20160108-->
+	
+	
+	
+	<!-- mysql connection config start 20160108-->
+	<dependency>
+		<groupId>mysql</groupId>
+		<artifactId>mysql-connector-java</artifactId>
+		<version>${mysql.connector.version}</version>
+	</dependency>
+	<!-- mysql connection config end 20160108-->
+	
+	
+	<!-- mybatis config start 20160108-->
+	<dependency>
+		<groupId>org.mybatis</groupId>
+		<artifactId>mybatis</artifactId>
+		<version>${mybatis.version}</version>
+	</dependency>
+
+	<dependency>
+		<groupId>org.mybatis</groupId>
+		<artifactId>mybatis-spring</artifactId>
+		<version>1.2.2</version>
+	</dependency>
+	<!-- mybatis config end 20160108-->
+	
+	
+	<!-- HikariCP -->
+	<dependency>
+		<groupId>com.zaxxer</groupId>
+		<artifactId>HikariCP</artifactId>
+		<version>2.4.0</version>
+	</dependency>
+	
+	<!-- For ChainedTransactionManager -->
+	<dependency>
+		<groupId>org.springframework.data</groupId>
+		<artifactId>spring-data-commons</artifactId>
+		<version>1.10.0.RELEASE</version>
+	</dependency>
+	
+	
+	<!-- log 日志记录 20150111 start-->
+	<dependency>
+		<groupId>org.apache.logging.log4j</groupId>
+		<artifactId>log4j-api</artifactId>
+		<version>${log4j.version}</version>
+	</dependency>
+	<dependency>
+		<groupId>org.apache.logging.log4j</groupId>
+		<artifactId>log4j-core</artifactId>
+		<version>${log4j.version}</version>
+	</dependency>
+	<dependency> <!-- 桥接：告诉Slf4j使用Log4j2 -->
+		<groupId>org.apache.logging.log4j</groupId>
+		<artifactId>log4j-slf4j-impl</artifactId>
+		<version>${log4j.version}</version>
+	</dependency>
+	<dependency> <!-- 桥接：告诉commons logging使用Log4j2 -->
+		<groupId>org.apache.logging.log4j</groupId>
+		<artifactId>log4j-jcl</artifactId>
+		<version>${log4j.version}</version>
+	</dependency>
+	<dependency>
+		<groupId>org.slf4j</groupId>
+		<artifactId>slf4j-api</artifactId>
+		<version>${slf4j.version}</version>
+	</dependency>
+	<!-- log 日志记录 20150111 end-->
+	
+	
+	<!-- 使用Spring管理和配置事务 20150111 start-->
+	<dependency>
+		<groupId>org.aspectj</groupId>
+		<artifactId>aspectjweaver</artifactId>
+		<version>1.8.8</version>
+	</dependency>
+        
+	
+	<!-- aop 设置 -->
+	<dependency>
+		<groupId>org.aspectj</groupId>
+		<artifactId>aspectjrt</artifactId>
+		<version>1.8.8</version>
+	</dependency>
+        
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-aspects</artifactId>
+            <version>${org.springframework.version}</version>
+        </dependency>
+        
+	<dependency>
+		<groupId>cglib</groupId>
+		<artifactId>cglib</artifactId>
+		<version>2.2</version>
+	</dependency>
+	
+	
+	<!-- 使用Spring管理和配置事务 20150111 end-->
+	
+	<dependency>
+		<groupId>org.apache.commons</groupId>
+		<artifactId>commons-lang3</artifactId>
+		<version>3.4</version>
+	</dependency>
+	
+	<!-- Servlet API 3.0 -->
+	<dependency>
+		<groupId>javax.servlet</groupId>
+		<artifactId>javax.servlet-api</artifactId>
+		<version>3.1.0</version>
+		<scope>provided</scope>
+	</dependency>
+	
+	<dependency>
+		<groupId>com.fasterxml.jackson.core</groupId>
+		<artifactId>jackson-databind</artifactId>
+		<version>2.6.0</version>
+	</dependency>
+	
+	<!-- redis config -->
+	<dependency>
+		<groupId>redis.clients</groupId>
+		<artifactId>jedis</artifactId>
+		<version>2.7.2</version>
+	</dependency>
+	
+	<!-- solr config -->
+	<dependency>
+	  <groupId>org.apache.solr</groupId>
+	  <artifactId>solr-solrj</artifactId>
+	  <version>5.4.0</version>
+	</dependency>
+	
+	<dependency>  
+        <groupId>org.springframework.amqp</groupId>  
+        <artifactId>spring-rabbit</artifactId>  
+        <version>1.5.4.RELEASE</version>  
+    </dependency>  
+	
+  </dependencies>
+  
+  
+  <!-- 选择不同的属性为resource中的变量赋值。development：开发环境，production：生产环境 -->
+	<profiles>
+		<profile>
+			<id>development</id>
+			<build>
+				<filters>
+					<filter>src/main/resources/profile/development.properties</filter>
+				</filters>
+			</build>
+			<activation>
+				<activeByDefault>true</activeByDefault>
+			</activation>
+		</profile>
+		<profile>
+			<id>test</id>
+			<build>
+				<filters>
+					<filter>src/main/resources/profile/test.properties</filter>
+				</filters>
+			</build>
+		</profile>
+		<profile>
+			<id>production</id>
+			<build>
+				<filters>
+					<filter>src/main/resources/profile/production.properties</filter>
+				</filters>
+			</build>
+		</profile>
+		
+	</profiles>
+	
+	
+	<build>
+		<finalName>sxb</finalName>
+
+		<!-- 启用filtering功能为resources中的变量赋值 -->
+		<resources>
+			<resource>
+				<directory>src/main/resources</directory>
+				<filtering>true</filtering>
+				<excludes>
+					<exclude>**/*.p12</exclude>
+				</excludes>
+			</resource>
+			<resource>
+				<directory>src/main/resources</directory>
+				<filtering>false</filtering>
+				<includes>
+					<include>**/*.p12</include>
+				</includes>
+			</resource>
+			<resource>
+				<directory>src/main/java</directory>
+				<includes>
+					<include>**/*.xml</include>
+				</includes>
+			</resource>
+		</resources>
+
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<version>3.3</version>
+				<configuration>
+					<source>1.7</source>
+					<target>1.7</target>
+				</configuration>
+			</plugin>
+
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-eclipse-plugin</artifactId>
+				<version>2.10</version>
+				<configuration>
+					<downloadSources>true</downloadSources>
+					<downloadJavadocs>true</downloadJavadocs>
+				</configuration>
+			</plugin>
+			<plugin>
+				<groupId> org.apache.maven.plugins</groupId>
+				<artifactId>maven-resources-plugin</artifactId>
+				<version>2.7</version>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-war-plugin</artifactId>
+				<version>2.6</version>
+				<configuration>
+					<includeEmptyDirectories>true</includeEmptyDirectories>
+				</configuration>
+			</plugin>
+		</plugins>
+	</build>
+	
+</project>

@@ -1,0 +1,10 @@
+CREATE TABLE `db_sxb_user`.`ts_user` (
+  `id` INT(11) NOT NULL,
+  `login` VARCHAR(25) NULL,
+  `password` VARCHAR(255) NULL,
+  `phone` VARCHAR(25) NULL,
+  `email` VARCHAR(255) NULL,
+  `state` TINYINT(1) NULL,
+  `ctime` INT(11) NULL,
+  `mtime` INT(11) NULL,
+  PRIMARY KEY (`id`));

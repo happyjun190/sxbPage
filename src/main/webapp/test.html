@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="UTF-8">
+	<title>test</title>
+	<link rel="Shortcut Icon" href="./resources/favicon.ico">
+	<script src="./resources/jquery-2.1.4.js" charset="UTF-8" type="text/javascript"></script>
+	<script src="./resources/jquery.bigautocomplete.js" charset="UTF-8" type="text/javascript"></script>
+	<script src="./resources/sys.js" charset="UTF-8" type="text/javascript"></script>
+	
+	<script src="testcases.js" charset="UTF-8" type="text/javascript"></script>
+	
+	<link href="./resources/common.css" type="text/css" rel="stylesheet" />
+	<link rel="stylesheet" href="./resources/jquery.bigautocomplete.css" type="text/css" />
+
+</head>
+<body>
+	<table>
+		<tr>
+			<th>用例选择</th>
+			<td><select id="tcTitle"></select>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+				<input type="button" value="保存token" onClick="saveToken();">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+				<input type="button" value="批量测试" onClick="testInBatch();">
+			</td>
+		</tr>
+		<tr>
+			<th>用例搜索</th>
+			<td><input type="text" id="tcSearch"  size="80" />
+				<input type="button" value="清空" onClick="$('#tcSearch').val('');">&nbsp;&nbsp;
+				选择作者：<select id="authorList"></select>
+			</td>
+		</tr>
+		<tr>
+			<th>请求地址</th>
+			<td><input type="text" id="url" value="" size="80" /></td>
+		</tr>
+		<tr>
+			<th>请求参数</th>
+			<td><textarea id="params" rows="8" cols="100"></textarea></td>
+			<td>
+				<a href="./cache-admin.html" target="_blank">Goto -> LocalCache管理</a>
+				<br/><br/>
+				<a href="./redis-admin.html" target="_blank">Goto -> Redis管理</a>
+			</td>
+		</tr>
+		<tr>
+			<td style="height:40; text-align:center;" colspan="2"><input type="button" value="发送请求" onClick="goRequest()" />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+				<input type="button" name="button1" value="清除参数"	onClick="resetParams();">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+				<input type="button" name="button2" value="清除结果"	onClick="resetResponse();">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+				<!-- <input type="button" id="pasteData" name="button2" value="粘贴" onClick="pasteData();"> --></td>
+		</tr>
+	</table>
+
+	<div>
+		<div class="bold">返回结果：<label id=costMs class="highlight"></label></div>
+		<div><pre id="response" class="highlight"></pre></div>
+	</div>
+</body>
+
+<script>
+	var rootPath;
+	var beginTime;
+	var titleButified = false; //是否已经加上method和author
+	var authorList = new Array("所有作者");
+	var phpPath="http://192.168.0.11/api.php";
+
+	//系统初始化：
+	$(function() {
+		rootPath = getRootPath();
+
+		//初始化TC列表、初始化作者列表
+		initTCSelect();
+
+		//TC列表变动时。。。
+		$("#tcTitle").change(function(){
+			$("#url").val(rootPath + $("#tcTitle option:selected").attr("url"));
+			$("#params").val(JSON.stringify( JSON.parse(decodeURI($("#tcTitle option:selected").attr("requestBody"))), null, "\t"));
+		});
+		
+		//作者列表变动时。。。
+		$("#authorList").change(function(){
+			var targetAuthor = $("#authorList option:selected").val();
+			
+			if(targetAuthor == "所有作者"){
+				targetAuthor = undefined;
+			}
+			
+			initTCSelect(targetAuthor);
+		});
+		
+	    $("#tcSearch").bigAutocomplete({data : testCases,
+	    	callback : function(data){
+	    		
+				$("#url").val(rootPath + data.url);
+				$("#params").val(JSON.stringify( JSON.parse(decodeURI(data.requestBody)), null, "\t"));
+				$("#tcTitle").val(data.title);
+			}
+		});
+	});
+
+	//根据testCases数组初始化测试用例下拉列表
+	function initTCSelect(targetAuthor) {
+		$("#tcTitle").empty();
+		$("#tcTitle").append("<option>选择测试用例 </option>");
+		
+		$.each(testCases, function(index, tc) {
+			var author = tc.author || "无名氏";
+
+			//根据author过滤
+			if(targetAuthor != undefined && targetAuthor != author){
+				return true; // 相当于 continue
+			}
+		
+			if(titleButified==false){
+				var url = new String(tc.url);
+				var position = url.search(/\/\w+\/v\d+$/gi);  //找到 “/***/v###” 的位置
+				if(position == -1){
+					position = url.lastIndexOf("/");
+				}
+				
+				//添加method
+				var method = url.slice(position+1);
+				tc.title += "（" + method + "）";
+				
+				//添加author
+				tc.title += "（" + author + "）";
+				
+				//把author加入到authorList中，去重
+				if(authorList.indexOf(author) == -1){
+					authorList.push(author);
+				}					
+			}
+			$("#tcTitle").append("<option url='" + tc.url + "' requestBody=" + encodeURI(tc.requestBody) + ">" + tc.title + "</option>");
+		});
+		
+		if(titleButified == false){
+			initAuthorList(authorList);
+			titleButified = true;
+		}
+	}
+
+	//初始化作者下拉列表
+	function initAuthorList(authorList){
+		$("#authorList").empty();
+		$.each(authorList, function(index, author) {
+			$("#authorList").append("<option>" + author + "</option>");
+		});
+	}
+		
+	function resetForm() {
+		$("#params").val("");
+		$("#url").val("");
+		resetResponse();
+	}
+	function resetParams() {
+		$("#params").val("");
+	}
+	function resetResponse() {
+		$("#response").html("");
+		$("#costMs").html("");
+	}
+	function pasteData() {
+		$("#params").val(window.clipboardData.getData("Text"));
+	}
+	
+	//根据毫秒数返回不同的颜色的span
+	function getCostMs(){
+		var costMs = (new Date())-beginTime;
+		var resultSpan="";
+		if(costMs<100){
+			resultSpan = "<span class='perfect'>" + costMs + "</span>";
+		}else if(costMs<500){
+			resultSpan = "<span class='attention'>" + costMs + "</span>";
+		}else{
+			resultSpan = "<span class='important'>" + costMs + "（速度有点慢……考虑优化一下？）" + "</span>";
+		}
+		return "耗时" + resultSpan + "毫秒";
+	}
+	
+	//ajax返回后的处理
+	function ajaxCallback(jsonResult){
+		$("#costMs").html(getCostMs());
+		$("#response").html(JSON.stringify(jsonResult, null, "\t"));
+	}
+	
+	//发送请求给目标url
+	function goRequest() {
+		beginTime = new Date();
+		//alert($("#url").val());
+		ajaxRequest($("#url").val(), $("#params").val(), ajaxCallback);
+	}
+
+	//保存登录后的token
+	function saveToken() {
+		var responseString = $("#response").text();
+		if (responseString == "") {
+			alert("没有登录返回的数据！请先执行登录，确认返回结果中有userToken字段。");
+			return;
+		}
+		var response = JSON.parse(responseString);
+
+		if (response.data.usertoken == undefined) {
+			alert("没有userToken可以被保存！请先执行登录，确认返回结果中有userToken字段。");
+			return;
+		}
+		$("#saveTokenBtn").val("正在保存token……");
+		var body = {};
+		$.each(testCases, function(index, tc) {
+			body = JSON.parse(tc.requestBody);
+			if (body.usertoken != undefined) {
+				body.usertoken = response.data.usertoken;
+				tc.requestBody = JSON.stringify(body);
+			}
+		});
+		initTCSelect();
+		alert("usertoken已经被保存到所有测试用例中。");
+		$("#saveTokenBtn").val("token已经保存");
+	}
+
+	//往response中添加信息
+	function addMsg(msg){
+		$("#response").html($("#response").html() + msg + "\n");
+	}
+	
+	function clearMsg(){
+		$("#response").html("");
+	}
+
+	//批量测试：
+	function testInBatch(){
+		resetForm();
+		addMsg("批量测试试用版……欢迎使用！");
+		addMsg("用例运行中，请耐心等候……");
+		var loginTC = testCases[1];
+		ajaxRequest(rootPath+loginTC.url, loginTC.requestBody, function callback(jsonResult){
+			if(jsonResult.code=="40001"){
+				addMsg("<span class='perfect'>TC 0 登录成功</span>");
+				
+				//保存token
+				var body = {};
+				$.each(testCases, function(index, tc) {
+					body = JSON.parse(tc.requestBody);
+					if (body.usertoken != undefined) {
+						body.usertoken =jsonResult.data.usertoken;
+						tc.requestBody = JSON.stringify(body);
+					}
+				}); 
+				initTCSelect();
+				var stats = {passedNo:0, failedNo:0, attentionNo:0};
+				runSingleTcInBatch(2, stats); //从第二个TC开始运行
+			}else{
+				addMsg("登录失败……");
+			}
+		});
+	}
+
+	//递归调用，以解决chrome不实时刷新的问题。
+	function runSingleTcInBatch(i, stats){
+		//递归结束条件
+		if(i==testCases.length){
+			addMsg("<span class='highlight'><b>总数：" + (testCases.length) + "\t成功：" + stats.passedNo  + "\t注意：" + stats.attentionNo + "\t失败：" + stats.failedNo + "</b></span>");
+			return;
+		}
+		
+		beginTime = new Date();
+		ajaxRequest(rootPath+testCases[i].url, testCases[i].requestBody, 
+			function callback(jsonResult, status){
+				if(jsonResult.code=="40001"){
+					stats.passedNo++;
+					addMsg("<span class='perfect'>TC " + i + " passed.\ttitle：" + testCases[i].title + "\tcode: " + jsonResult.code + "\t" + jsonResult.message + "</span>\t" + getCostMs());
+				}else if(jsonResult.code=="40003"){
+					stats.attentionNo++;
+					addMsg("<span class='attention'>TC " + i + " passed.\ttitle：" + testCases[i].title + "\tcode: " + jsonResult.code + "\t" + jsonResult.message + "</span>\t" + getCostMs());
+				}else{
+					stats.failedNo++;
+					addMsg("<span class='important'>TC " + i + " <b>failed!</b>\ttitle：" + testCases[i].title + "\tcode: " + jsonResult.code + "\t message: " + jsonResult.message + "</span>\t" + getCostMs());
+				}
+				runSingleTcInBatch(++i, stats);//递归调用
+			},
+			function(jqXHR, textStatus, errorThrown){//HTTP请求失败，比如：404 not found
+				stats.failedNo++;
+				addMsg("<span class='important'>TC " + i + " <b>failed!</b>\ttitle：" + testCases[i].title + "\t发了错误：" + textStatus + ";" + errorThrown + "</span>");
+				runSingleTcInBatch(++i, stats);//递归调用
+			},
+			true);
+	}	
+</script>
+
+</html>
