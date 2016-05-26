@@ -48,14 +48,14 @@
 											<fieldset>
 												<label class="block clearfix">
 													<span class="block input-icon input-icon-right">
-														<input type="text" class="form-control" placeholder="Username" />
+														<input type="text" class="form-control" id="username" placeholder="Username" />
 														<i class="icon-user"></i>
 													</span>
 												</label>
 
 												<label class="block clearfix">
 													<span class="block input-icon input-icon-right">
-														<input type="password" class="form-control" placeholder="Password" />
+														<input type="password" class="form-control"  id="password"  placeholder="Password" />
 														<i class="icon-lock"></i>
 													</span>
 												</label>
@@ -233,11 +233,15 @@
 </body>
 
 <script type="text/javascript">
+
 	$(".btn-primary").on("click", function() {
+		var username = $("#username").val();
+		var password = $("#password").val();
 		sys.ajax({
 			url : "/servlet/auth/login",
 			params:{
-				login: "15813356251"
+				login: username,
+				password: password
 			},
 			callback : loginCallBack
 		});
@@ -245,11 +249,8 @@
 	
 	//登陆回调函数
 	function loginCallBack(result) {
-		alert(JSON.stringify(result));
+		location.href="index.html?t="+Math.random();
 	}
-	
-	
-
 	
 </script>
 	
