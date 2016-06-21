@@ -12,7 +12,7 @@
 		</Console>
 		
 		<!-- 输出到文件，按天或者超过128MB分割 -->
-		<RollingFile name="RollingFile" ignoreExceptions="false" fileName="${log.file.dir}/sxb.log"	filePattern="${log.file.dir}/$${date:yyyy-MM}/ysb-%d{yyyy-MM-dd}-%i.log.gz">
+		<RollingFile name="RollingFile" ignoreExceptions="false" fileName="${log.file.dir}/sxb.log"	filePattern="${log.file.dir}/$${date:yyyy-MM}/sxb-%d{yyyy-MM-dd}-%i.log.gz">
 			<!-- 需要记录的级别 -->
 			<!-- <ThresholdFilter level="info" onMatch="ACCEPT" onMismatch="DENY" /> -->
 			<PatternLayout pattern="%d{yyyy-MM-dd HH:mm:ss,SSS}:%4p %t (%F:%L) - %m%n" />
