@@ -36,16 +36,10 @@
 		<Root level="${log.root.level}"> <!-- 全局配置 -->
 			<AppenderRef ref="Console" />
 			<AppenderRef ref="RollingFile"/>
-<!-- 			<AppenderRef ref="Logstash"/> -->
 		</Root>
 
-		<!-- 为sql语句配置特殊的Log级别，方便调试 -->
-		<!-- <Logger name="com.ysb.dao" level="${log.sql.level}" additivity="false">
-			<AppenderRef ref="Console" />
-		</Logger> -->
-		
-		<!-- 为com.ysb包配置特殊的Log级别，方便调试 -->
-		<Logger name="com.ysb" level="${log.ysb.level}" additivity="false">
+		<!-- 为com.sxb包配置特殊的Log级别，方便调试 -->
+		<Logger name="com.sxb" level="${log.sxb.level}" additivity="false">
 			<AppenderRef ref="Console" />
 			<AppenderRef ref="RollingFile"/>
 		<!-- 	<AppenderRef ref="Logstash"/> -->

@@ -12,6 +12,7 @@ function getApiRoot(){
 	return getRootPath();
 }
 
+
 /**
  * 发送ajax POST请求，请求参数为JSON String格式
  * 
@@ -29,7 +30,9 @@ function getApiRoot(){
 function ajaxRequest(url, params, successCallback, errorCallback, async) {
 	
 	var _params = (typeof params == "string") ? JSON.parse(params) : params;
-	_params.authcode = "123456";
+	if(isEmpty(_params.authcode)){
+		_params.authcode = "123456";
+	}
 	_params=JSON.stringify(_params);
 	
 	var _url = (url.indexOf("http") == 0) ? url : getApiRoot() + url;
