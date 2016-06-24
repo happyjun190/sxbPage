@@ -28,7 +28,7 @@ public class AuthService implements IAuthService {
 		Map<String, Object> resultMap = new HashMap<>();
 		resultMap.put("userInfo", tabUser);
 		
-		return new JsonResult(ReturnCode.SUCCESS,"",resultMap);
+		return new JsonResult(ReturnCode.SUCCESS,"用户登陆成功",resultMap);
 	}
 
 }

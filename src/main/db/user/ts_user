@@ -8,3 +8,15 @@ CREATE TABLE `db_sxb_user`.`ts_user` (
   `ctime` INT(11) NULL,
   `mtime` INT(11) NULL,
   PRIMARY KEY (`id`));
+
+  
+create table `db_sxb_user`.`ts_user_kq` (
+  `id` INT(11) NOT NULL,
+  `user_id` INT(11) NOT NULL,
+  `user_name` VARCHAR(255) NOT NULL default "",
+  `position` VARCHAR(255) NOT NULL default "",
+  `sex` TINYINT(1) NOT NULL,
+  `address` VARCHAR(255) NOT NULL default "",
+  `ctime` INT(11) NOT NULL default 0,
+  `mtime` INT(11) NOT NULL default 0,
+  PRIMARY KEY (`id`));
