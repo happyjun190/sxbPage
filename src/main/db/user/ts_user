@@ -9,7 +9,9 @@ CREATE TABLE `db_sxb_user`.`ts_user` (
   `mtime` INT(11) NULL,
   PRIMARY KEY (`id`));
 
-  
+drop table if EXISTS  `db_sxb_user`.`ts_user_kq`
+
+
 create table `db_sxb_user`.`ts_user_kq` (
   `id` INT(11) NOT NULL,
   `user_id` INT(11) NOT NULL,
