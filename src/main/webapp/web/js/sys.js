@@ -19,9 +19,9 @@
      * 获取项目根路径，如： http://localhost:8083
      */
     var getHost = function () {
-        //获取当前网址，如： http://localhost:8083/ysb/web/index.html
+        //获取当前网址，如： http://localhost:8083/sxb/web/index.html
         var curWwwPath = window.document.location.href;
-        //获取主机地址之后的目录，如：ysb/web/index.html
+        //获取主机地址之后的目录，如：sxb/web/index.html
         var pathName = window.document.location.pathname;
         var pos = curWwwPath.indexOf(pathName);
         //获取主机地址，如： http://localhost:8083
@@ -97,7 +97,7 @@
         },
 
         /**
-         * 获取API URL的根，比如http://api.ysbang.cn/ysb
+         * 获取API URL的根，比如http://api.sxbang.cn/sxb
          */
         getApiRoot: function () {
             return getHost() + projectName;
@@ -376,13 +376,13 @@
 		 * "monney":3.1,
 		 * "job":"店员",
 		 * "coupon":null,
-		 * "headUrl":"http://test.ysbang.cn//data/img/pharmacy/user/2015/08/08/3728e658-6126-4a4c-b5ff-207739158429.jpg",
+		 * "headUrl":"http://test.sxbang.cn//data/img/pharmacy/user/2015/08/08/3728e658-6126-4a4c-b5ff-207739158429.jpg",
 		 * "couponCount":0,
 		 * "address":{"storetitle":"昌港药店",
 		 * 			"consignee":"李连政",
 		 * 			"areaname":"海珠区",
 		 * 			"cityname":"广州市",
-		 * 			"headurl":"http://test.ysbang.cn//data/img/pharmacy/user/2015/08/08/3728e658-6126-4a4c-b5ff-207739158429.jpg",
+		 * 			"headurl":"http://test.sxbang.cn//data/img/pharmacy/user/2015/08/08/3728e658-6126-4a4c-b5ff-207739158429.jpg",
 		 * 			"postcode":"",
 		 * 			"cityid":31677,
 		 * 			"storeid":1312034,

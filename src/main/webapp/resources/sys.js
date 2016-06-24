@@ -6,7 +6,7 @@ var loginErrorCode = "40020";
 var successReturnCode = "40001";
 
 /**
- * 获取API URL的根，比如http://api.ysbang.cn/ysb
+ * 获取API URL的根，比如http://api.sxbang.cn/sxb
  */
 function getApiRoot(){
 	return getRootPath();
@@ -21,7 +21,7 @@ function getApiRoot(){
  * 		//doSomething...
  * });
  * 
- * @Param: url绝对路径或相对路径，比如http://locolhost:8080/ysb/servlet/login 或 /servlet/login
+ * @Param: url绝对路径或相对路径，比如http://locolhost:8080/sxb/servlet/login 或 /servlet/login
  * @Param: params：参数（JSON String类型、或对象类型都可以），自动添加authcode
  * @Param: successCallback：成功的回调处理函数
  * @Param: errorCallback：失败的回调处理函数
@@ -90,17 +90,17 @@ function ajaxRequestForm(url, params, successCallback, errorCallback, async) {
 
 
 /**
- * 获取项目根路径，如： http://localhost:8083/ysb
+ * 获取项目根路径，如： http://localhost:8083/sxb
  */
 function getRootPath() {
-	//获取当前网址，如： http://localhost:8083/ysb/web/index.html
+	//获取当前网址，如： http://localhost:8083/sxb/web/index.html
 	var curWwwPath = window.document.location.href;
-	//获取主机地址之后的目录，如：ysb/web/index.html
+	//获取主机地址之后的目录，如：sxb/web/index.html
 	var pathName = window.document.location.pathname;
 	var pos = curWwwPath.indexOf(pathName);
 	//获取主机地址，如： http://localhost:8083
 	var localhostPath = curWwwPath.substring(0, pos);
-	//获取带"/"的项目名，如：/ysb
+	//获取带"/"的项目名，如：/sxb
 	var projectName = pathName.substring(0, pathName.substr(1).indexOf('/') + 1);
 	return (localhostPath + projectName);
 }

@@ -32,6 +32,7 @@ public class AuthController {
 	@RequestMapping(value = "/login", method = RequestMethod.POST)
 	public JsonResult login(HttpServletRequest request, @RequestBody Map<String, Object> map) {
 		try {
+			logger.info("=====================login success===========");
 			return authService.login(map);
 		} catch (Exception ex) {
 			logger.error(ex.getMessage(), ex);
