@@ -305,6 +305,14 @@
         <artifactId>spring-rabbit</artifactId>  
         <version>1.5.4.RELEASE</version>  
     </dependency>  
+    
+    
+    <!-- guaua -->
+    <dependency>
+		<groupId>com.google.guava</groupId>
+		<artifactId>guava</artifactId>
+		<version>18.0</version>
+	</dependency>
 	
   </dependencies>
   

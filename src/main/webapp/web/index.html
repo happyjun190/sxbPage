@@ -12,12 +12,20 @@
 		<link rel="stylesheet" href="assets/css/ace.min.css" />
 		<link rel="stylesheet" href="assets/css/ace-rtl.min.css" />
 		<link rel="stylesheet" href="assets/css/ace-skins.min.css" />
+		<link rel="stylesheet" href="js/widget/dialog/ysbpc-dialog.css">
 		<script src="assets/js/ace-extra.min.js"></script>
 		
 		<script type="text/javascript" src='js/jquery.min.js'></script>
 		<script type="text/javascript" src='js/bootstrap.min.js'></script>
 		<script src="js/template.js"></script>
 		<script src="js/sys.js"></script>
+		
+		<script src="js/widget/dialog/ysbpc-dialog-norequire.js"></script>
+		
+		<!-- indexJs -->
+		<script src="js/indexCommon.js"></script>
+		
+		
 	</head>
 
 	<body>
@@ -473,45 +481,25 @@
 						<i class="icon-pencil bigger-130"></i>
 					</a>
 		
-					<a class="red" href="#">
+					<a class="red" href='javascript:;' onclick='deleteItem(this)'>
 						<i class="icon-trash bigger-130"></i>
 					</a>
-				</div>
-		
-				<div class="visible-xs visible-sm hidden-md hidden-lg">
-					<div class="inline position-relative">
-						<button class="btn btn-minier btn-yellow dropdown-toggle" data-toggle="dropdown">
-							<i class="icon-caret-down icon-only bigger-120"></i>
-						</button>
-						<ul class="dropdown-menu dropdown-only-icon dropdown-yellow pull-right dropdown-caret dropdown-close">
-							<li>
-								<a href="#" class="tooltip-info" data-rel="tooltip" title="View">
-									<span class="blue">
-										<i class="icon-zoom-in bigger-120"></i>
-									</span>
-								</a>
-							</li>
-							<li>
-								<a href="#" class="tooltip-success" data-rel="tooltip" title="Edit">
-									<span class="green">
-										<i class="icon-edit bigger-120"></i>
-									</span>
-								</a>
-							</li>
-		
-							<li>
-								<a href="#" class="tooltip-error" data-rel="tooltip" title="Delete">
-									<span class="red">
-										<i class="icon-trash bigger-120"></i>
-									</span>
-								</a>
-							</li>
-						</ul>
-					</div>
 				</div>
 			</td>
 		</tr>
 	{{/each}}
+	</script>
+	
+	
+	<!-- 提示内容模板 -->
+	<script id="T-tipContent" type="text/html">
+	{{each underDeliveryFloorData as floorInfo}}
+	<div class="tipContent-div">
+		<p class="companyName">{{floorInfo.providerName}}</span></p>
+		<p class="sendStandard">还差{{floorInfo.floorGap}}元</p>
+	</div>
+	{{/each}}
+	<p class="tipGrey">每个商家的下单金额累计满起送金额才能配送，记得再多下点哦</p>
 	</script>
 	
 	<script type="text/javascript">
@@ -593,6 +581,46 @@
 			return 'left';
 		}
 		
+		
+		//删除某条记录
+		function deleteItem() {
+			var templateData = new Object();
+			var deliveryFloorInfo = new Object();
+			var underDeliveryFloorData = new Object();
+			deliveryFloorInfo.floorGap = 1000;
+			deliveryFloorInfo.providerName = "中国联通"
+			underDeliveryFloorData[0] = deliveryFloorInfo;
+			
+			templateData.underDeliveryFloorData = underDeliveryFloorData;
+			var contentHtml = template("T-tipContent",templateData);
+			parent.commonDialog.showModal({
+				//'top':sys.getWindowHeight()/2,
+				'top':getScrollTop1()+300,
+				'width': 500,
+				'height': 'auto',
+				'title': "温馨提示",
+				'content': "<div style='text-align: left; padding: 10px 25px;'>"+contentHtml+"</div>",
+				'cancelText':'',
+				'okText': '我知道了',
+				//'okHandler':commitOrder(orderData, providerDrugInfoList)
+				'okHandler':commitOrder,
+				'cancelText':"取消"
+	            //'cancelHandler':null
+			});
+		}
+		
+		function getScrollTop1() {
+		    if ('pageYOffset' in parent.window) {
+		        return parent.window.pageYOffset;
+		    } else if (parent.document.compatMode === "BackCompat") {
+		        return parent.document.body.scrollTop;
+		    } else {
+		        return parent.document.documentElement.scrollTop;
+		    }
+		}
+		
+		function commitOrder() {
+		}
 		
 	</script>
 </html>

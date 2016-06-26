@@ -12,6 +12,7 @@ import com.sxb.commons.json.JsonResult;
 import com.sxb.dao.user.UserDAO;
 import com.sxb.model.user.TabUserKq;
 import com.sxb.service.empmanage.IEmpManageService;
+import com.sxb.service.empmanage.IEmpManageServiceCacheables;
 
 /**
  * 员工管理模块
@@ -26,12 +27,23 @@ public class EmpManageService implements IEmpManageService {
 	@Autowired
 	private UserDAO userDAO;
 	
+	@Autowired
+	private IEmpManageServiceCacheables empManageServiceCacheables;
+	
 	@Override
 	public JsonResult getUserKqInfoList(Map<String, Object> map) {
-		Map<String, Object> resultMap = new HashMap<>();
-		List<TabUserKq> userKqInfoList = userDAO.getUserKqList();
-		resultMap.put("userKqInfoList", userKqInfoList);
+		int userId = 10;
+		Map<String, Object> resultMap = empManageServiceCacheables.getUserKqInfoListCacheable(userId);
 		return new JsonResult(ReturnCode.SUCCESS,"获取用户考勤记录成功",resultMap);
 	}
 
+	@Override
+	public Map<String, Object> getUserKqInfoListForCache(int userId) {
+		Map<String, Object> resultMap = new HashMap<>();
+		List<TabUserKq> userKqInfoList = userDAO.getUserKqList();
+		resultMap.put("userKqInfoList", userKqInfoList);
+		return resultMap;
+	}
+
+	
 }
