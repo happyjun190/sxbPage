@@ -20,5 +20,14 @@ public interface IEmpManageService {
 	 * @return
 	 */
 	public Map<String, Object> getUserKqInfoListForCache(int userId);
+	
+	
+	/**
+	 * 修改用户考勤信息
+	 * @param map
+	 * @return
+	 */
+	public JsonResult editUserKqInfo(Map<String, Object> map);
+	
 
 }

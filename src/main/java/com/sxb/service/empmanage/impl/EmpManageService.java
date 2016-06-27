@@ -45,5 +45,23 @@ public class EmpManageService implements IEmpManageService {
 		return resultMap;
 	}
 
+	@Override
+	public JsonResult editUserKqInfo(Map<String, Object> map) {
+		
+		int kqId = (int) map.get("itemId");
+		String userName = (String) map.get("userName");
+		String position = (String) map.get("position");
+		String address = (String) map.get("address");
+		
+		TabUserKq tabUserKq = userDAO.selectUserKqInfoForUpdate(kqId);
+		tabUserKq.setUser_name(userName);
+		tabUserKq.setPosition(position);
+		tabUserKq.setAddress(address);
+		userDAO.updateUserKqInfo(tabUserKq);
+		return new JsonResult(ReturnCode.SUCCESS,"修改用户考勤记录成功",null);
+	}
+
+	
+	
 	
 }

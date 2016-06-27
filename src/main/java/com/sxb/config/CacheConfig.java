@@ -31,7 +31,7 @@ public class CacheConfig {
 	 */
 	public enum Caches{
 		
-		getUserKqInfoList(60),
+		getUserKqInfoList(600),
 		
 		;
 		

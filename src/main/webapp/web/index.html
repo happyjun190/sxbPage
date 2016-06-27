@@ -13,6 +13,7 @@
 		<link rel="stylesheet" href="assets/css/ace-rtl.min.css" />
 		<link rel="stylesheet" href="assets/css/ace-skins.min.css" />
 		<link rel="stylesheet" href="js/widget/dialog/ysbpc-dialog.css">
+		
 		<script src="assets/js/ace-extra.min.js"></script>
 		
 		<script type="text/javascript" src='js/jquery.min.js'></script>
@@ -25,10 +26,9 @@
 		<!-- indexJs -->
 		<script src="js/indexCommon.js"></script>
 		
-		
 	</head>
 
-	<body>
+	<body id="indexBody">
 		<div class="navbar navbar-default" id="navbar">
 			<script type="text/javascript">
 				try{ace.settings.check('navbar' , 'fixed')}catch(e){}
@@ -472,16 +472,19 @@
 			
 		
 			<td>
-				<div class="visible-md visible-lg hidden-sm hidden-xs action-buttons">
+				<div class="visible-md visible-lg hidden-sm hidden-xs action-buttons operationDiv" 
+					 itemId="{{userKqInfo.id}}" userName="{{userKqInfo.user_name}}"
+					 position="{{userKqInfo.position}}" address="{{userKqInfo.address}}">
+	
 					<a class="blue" href="#">
 						<i class="icon-zoom-in bigger-130"></i>
 					</a>
 		
-					<a class="green" href="#">
+					<a class="green editItem"  href='javascript:;'>
 						<i class="icon-pencil bigger-130"></i>
 					</a>
 		
-					<a class="red" href='javascript:;' onclick='deleteItem(this)'>
+					<a class="red deleteItem" href='javascript:;'>
 						<i class="icon-trash bigger-130"></i>
 					</a>
 				</div>
@@ -494,14 +497,35 @@
 	<!-- 提示内容模板 -->
 	<script id="T-tipContent" type="text/html">
 	{{each underDeliveryFloorData as floorInfo}}
-	<div class="tipContent-div">
-		<p class="companyName">{{floorInfo.providerName}}</span></p>
-		<p class="sendStandard">还差{{floorInfo.floorGap}}元</p>
-	</div>
+		<div class="tipContent-div">
+			<p class="companyName">{{floorInfo.providerName}}</span></p>
+			<p class="sendStandard">还差{{floorInfo.floorGap}}元</p>
+		</div>
 	{{/each}}
 	<p class="tipGrey">每个商家的下单金额累计满起送金额才能配送，记得再多下点哦</p>
 	</script>
 	
+	
+	<script id="T-editUserKqInfo" type="text/html">
+	<form id="editUserKqInfo">
+		<div class="form-group">
+			<label class="col-sm-3 control-label no-padding-right" for="form-field-1"> 姓名 </label>
+			<div class="col-sm-9">
+				<input type="text" id="form-field-1" value="{{userName}}" class="col-xs-10 col-sm-5" />
+			</div>
+			<label class="col-sm-3 control-label no-padding-right" for="form-field-1"> 职位 </label>
+			<div class="col-sm-9">
+				<input type="text" id="form-field-1" value="{{position}}" class="col-xs-10 col-sm-5" />
+			</div>
+			<label class="col-sm-3 control-label no-padding-right" for="form-field-1"> 地址 </label>
+			<div class="col-sm-9">
+				<input type="text" id="form-field-1" value="{{address}}" class="col-xs-10 col-sm-5" />
+			</div>
+		</div>
+	<form>
+	</script>
+	
+		
 	<script type="text/javascript">
 		//页面加载时加载js函数
 		$(function(){
@@ -583,7 +607,7 @@
 		
 		
 		//删除某条记录
-		function deleteItem() {
+		$("#indexBody").on('click','.deleteItem',function(){
 			var templateData = new Object();
 			var deliveryFloorInfo = new Object();
 			var underDeliveryFloorData = new Object();
@@ -607,7 +631,46 @@
 				'cancelText':"取消"
 	            //'cancelHandler':null
 			});
-		}
+		});
+		
+		
+		//修改某条记录
+		$("#indexBody").on('click','.editItem',function(){
+			var userKqInfo = new Object();
+			
+			var itemId = $($(this).parents(".operationDiv")).attr("itemId");
+			var userName = $($(this).parents(".operationDiv")).attr("userName");
+			var position = $($(this).parents(".operationDiv")).attr("position");
+			var address = $($(this).parents(".operationDiv")).attr("address");
+			var ctime = $($(this).parents(".operationDiv")).attr("ctime");
+			var mtime = $($(this).parents(".operationDiv")).attr("mtime");
+			
+			userKqInfo.itemId = itemId;
+			userKqInfo.userName = userName;
+			userKqInfo.position = position;
+			userKqInfo.address = address;
+			userKqInfo.ctime = ctime;
+			userKqInfo.mtime = mtime;
+			
+			var contentHtml = template("T-editUserKqInfo",userKqInfo);
+			
+			parent.commonDialog.showModal({
+				//'top':sys.getWindowHeight()/2,
+				'top':getScrollTop1()+300,
+				'width': 500,
+				'height': 'auto',
+				'title': "温馨提示",
+				'content': "<div style='text-align: left; padding: 10px 25px;'>"+contentHtml+"</div>",
+				'cancelText':'',
+				'okText': '保存',
+				//'okHandler':commitOrder(orderData, providerDrugInfoList)
+				'okHandler':editUserKqInfo,
+				'cancelText':"取消"
+	            //'cancelHandler':null
+			});
+		});
+		
+		
 		
 		function getScrollTop1() {
 		    if ('pageYOffset' in parent.window) {
@@ -622,5 +685,31 @@
 		function commitOrder() {
 		}
 		
+		
+		function editUserKqInfo() {
+			var formData = new FormData($('form')[0]);
+			sys.ajaxFile("/servlet/empmanage/editUserKqInfo", formData, {
+				/* 
+				callback : function() {
+					location.href = "credit-step3.html";
+				},
+				errorCallback : function(result) {
+					//恢复提交按钮
+					$(".submit").attr("value", "提 交");
+					$(".submit").removeAttr("disabled");
+					//进度条隐藏
+					$('.progressbar').hide();
+					$('#progress').hide();
+					alert(result.message);
+				}, */
+				progressCallback : editUserKqInfoCallBack
+			});
+			
+		}
+		
+		
+		function editUserKqInfoCallBack() {
+			alert("修改记录成功");
+		}
 	</script>
 </html>
