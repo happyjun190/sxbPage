@@ -2,30 +2,91 @@
  * 函数封装到sys对象中，避免全局变量污染
  * 注意：需要在引用这个文件之前引用jQuery库文件
  */
+<!-- Google Analytics -->
+(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+        (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+ga('create', 'UA-82500120-1', 'auto');
+ga('send', 'pageview');
+<!-- End Google Analytics -->
+
 (function (_win, $) {
     "use strict";
 
     var projectName = "/sxb";
     var loginUrl = "login.html?t=" + Math.random();
-    var htmlVersion = "1.0.0";			//版本号，每次升级后要更改
+    var htmlVersion = "3.11.0";			//版本号，每次升级后要更改
     var myVersion = "pc" + htmlVersion;
+    var DEBUG = false;  //开发环境为true， 生产环境为false， 部署生产环境请修改为false
+    /*var userPhone = "";*/
+    var userPhone = localStorage.getItem("userAccount");
 
     var returnCode = {
         loginError: "40020",
         success: "40001"
     };
 
+
+    /*
+    *   判断用户是否使用IE内核
+    *   如果用户使用IE内核，则跳转到login.html
+    *   如果不是IE内核，则不处理
+    * */
+
+    if(location.pathname != "/login.html"){
+        (function () {
+            //IE浏览器检验
+            var browser=_win.navigator.appName;
+            var b_version=_win.navigator.appVersion
+            var _bversion=b_version.split(";");
+            var trim_Version;
+
+            if(_bversion[1]) {
+                trim_Version = _bversion[1].replace(/[ ]/g, "");
+                //todo ie8 可用
+                if (browser == "Microsoft Internet Explorer" && trim_Version == "MSIE6.0" || trim_Version == "MSIE7.0" ) {
+                    var result = _win.confirm("为了更好的为您提供服务，请将您的浏览器切换到急速模式");
+                    _win.location.href = "login.html"
+                }
+            }
+        })();
+    }
+
+    if(!!_win.addEventListener){
+        _win.addEventListener('error', function (err) {
+           gaSend(err);
+        });
+
+    }else if(!!_win.attachEvent){
+            _win.attachEvent('error', function (err) {
+                gaSend(err);
+            });
+    }
+
+
+    /*
+     *  发送JS错误信息
+     * */
+    var gaSend = function (err) {
+            if(!DEBUG){
+                var lineAndColumnInfo = err.colno ? ' 代码行数 line:' + err.lineno +', 代码列数 column:'+ err.colno : '代码行数 line:' + err.lineno;
+                var versionStr = err.filename.split("?");
+                var version = versionStr[1].split(" ");
+                var ua = navigator.userAgent.toLowerCase();
+                ga('send', 'event', 'JavaScript Error', 'javascript错误提示：' + err.message + " JS版本号：" + version[0] + " 浏览器：" + ua , '错误文件路径：' + err.filename + lineAndColumnInfo + '  用户手机:' + userPhone , 0, true);
+            }
+        };
+
     /**
      * 获取项目根路径，如： http://localhost:8083
      */
     var getHost = function () {
-        //获取当前网址，如： http://localhost:8083/sxb/web/index.html
+        //获取当前网址，如： http://localhost:8083/ysb/web/index.html
         var curWwwPath = window.document.location.href;
-        //获取主机地址之后的目录，如：sxb/web/index.html
-        var pathName = window.document.location.pathname;
-        var pos = curWwwPath.indexOf(pathName);
-        //获取主机地址，如： http://localhost:8083
-        return curWwwPath.substring(0, pos);
+        //获取origin，如： http://localhost:8083
+        var reg=/\bhttps?\W{3}[.\w+]*[:\d+]*/
+        return curWwwPath.match(reg)[0]
     };
 
     /**
@@ -79,6 +140,78 @@
         };
     })();
 
+    var frameF5Detect = function (e) {
+        e=e||window.event; //alert(e.which||e.keyCode);
+        if((e.which||e.keyCode)==116){
+            if(e.preventDefault){
+                e.preventDefault();
+                window.location.reload();
+            } else{
+                event.keyCode = 0;
+                e.returnValue=false;
+                window.location.reload();
+            }
+        }
+    };
+
+    $(function () {
+        //iframe里才会绑定这个f5检测
+        if ($(window.document).find("#pageContent").length == 0) {
+            $(_win).on("keydown", frameF5Detect);
+        }
+    })
+
+
+    var getElementsByClassName = function (parent,searchClass) {
+        var node;
+        var elements = new Array();
+        if(parent.getElementsByClassName){
+            var nodes = (node || parent).getElementsByClassName(searchClass),result = [];
+            for(var i=0 ;node = nodes[i++];){
+                elements.push(node)
+            }
+            return elements;
+        }else{
+                var children = (parent).getElementsByTagName('*');
+
+                for (var i=0; i<children.length; i++){
+                    var child = children[i];
+                    var classNames = child.className.split(' ');
+                    for (var j=0; j<classNames.length; j++){
+                        if (classNames[j] == searchClass) {
+                            elements.push(child);
+                            break;
+                        }
+                    }
+                }
+            return elements;
+
+
+            // node = node || parent;
+            // var classes = searchClass.split(" "),
+            //     elements = (tag === "*" && node.all)? node.all : node.getElementsByTagName(tag),
+            //     patterns = [],
+            //     current,
+            //     match;
+            // var i = classes.length;
+            // while(--i >= 0){
+            //     patterns.push(new RegExp("(^|\s)" + classes[i] + "(\s|$)"));
+            // }
+            // var j = elements.length;
+            // while(--j >= 0){
+            //     current = elements[j];
+            //     match = false;
+            //     for(var k=0, kl=patterns.length; k<kl; k++){
+            //         match = patterns[k].test(current.className);
+            //         if (!match) break;
+            //     }
+            //     if (match) result.push(current);
+            // }
+            // return result;
+        }
+    }
+
+
     _win["sys"] = {
         /**
          * 判断是否连锁总部
@@ -97,7 +230,7 @@
         },
 
         /**
-         * 获取API URL的根，比如http://api.sxbang.cn/sxb
+         * 获取API URL的根，比如http://api.ysbang.cn/ysb
          */
         getApiRoot: function () {
             return getHost() + projectName;
@@ -113,7 +246,7 @@
                 method: "POST",
                 url: "",
                 async: true,
-                params: {authcode: "123456", platform: "pc", version: myVersion},
+                params: {authcode: "123456", platform: "pc", version: myVersion,ua:navigator.userAgent},
                 dataType: "json",
                 contentType: "application/json;charset=utf-8",
                 cache: false,
@@ -376,13 +509,13 @@
 		 * "monney":3.1,
 		 * "job":"店员",
 		 * "coupon":null,
-		 * "headUrl":"http://test.sxbang.cn//data/img/pharmacy/user/2015/08/08/3728e658-6126-4a4c-b5ff-207739158429.jpg",
+		 * "headUrl":"http://test.ysbang.cn//data/img/pharmacy/user/2015/08/08/3728e658-6126-4a4c-b5ff-207739158429.jpg",
 		 * "couponCount":0,
 		 * "address":{"storetitle":"昌港药店",
 		 * 			"consignee":"李连政",
 		 * 			"areaname":"海珠区",
 		 * 			"cityname":"广州市",
-		 * 			"headurl":"http://test.sxbang.cn//data/img/pharmacy/user/2015/08/08/3728e658-6126-4a4c-b5ff-207739158429.jpg",
+		 * 			"headurl":"http://test.ysbang.cn//data/img/pharmacy/user/2015/08/08/3728e658-6126-4a4c-b5ff-207739158429.jpg",
 		 * 			"postcode":"",
 		 * 			"cityid":31677,
 		 * 			"storeid":1312034,
@@ -454,45 +587,53 @@
          * 修改头部导航样式
          * parameter:
          *            headMode: 1---head1,主要导航头部；2---head2，次导航头部
-         *            style-->样式 1192表示头部宽度为1192px，990表示头部宽度为990px
+         *            headStyle-:  1192---表示头部宽度为1192px，990---表示头部宽度为990px
          *
          */
         changeHeadStyle: function (headMode, headStyle) {
-            var isHead1Hidden = $(top.document.getElementsByClassName("page-head1")[0]).is(":hidden");	//head1是否隐藏
-            var isHead2Hidden = $(top.document.getElementsByClassName("page-head2")[0]).is(":hidden");	//head2是否隐藏
-            var currentHeadStyle = $(top.document.getElementById("headStyle")).attr("href").match(/\d+/); //当前所用头部的样式1192和990两种
 
-            switch (headMode) {
-                case 1:
-                    if (!isHead1Hidden && headStyle == currentHeadStyle) {
-                        break;
-                    } else {
-                        $(top.document.getElementsByClassName("page-head1")[0]).show();
-                        $(top.document.getElementsByClassName("page-head2")[0]).hide();
-                        if (!!top.document.getElementById("headStyle")) {
-                            if (headStyle != currentHeadStyle) {
-                                var hrefStr = "css/head" + headStyle + ".css"
-                                top.document.getElementById("headStyle").href = hrefStr;
+            // var pageHead1 = top.document.getElementsByClassName("page-head1")[0];	//head1是否隐藏.
+            // var pageHead2 = top.document.getElementsByClassName("page-head2")[0];	//head2是否隐藏
+            try {
+                var pageHead1 = top.document.getElementById("page-head1");	//head1是否隐藏.
+                var isHead1Hidden = pageHead1.hasAttribute("hidden");	//head1是否隐藏
+                var pageHead2 = top.document.getElementById("page-head2");	//head2是否隐藏
+                var isHead2Hidden = pageHead2.hasAttribute("hidden");	//head2是否隐藏
+                var currentHeadStyle = $(top.document.getElementById("headStyle")).attr("href").match(/\d+/); //当前所用头部的样式1192和990两种
+                switch (headMode) {
+                    case 1:
+                        if (!isHead1Hidden && headStyle == currentHeadStyle) {
+                            break;
+                        } else {
+                            pageHead1.removeAttribute("hidden");
+                            pageHead2.setAttribute("hidden", "hidden");
+                            if (!!top.document.getElementById("headStyle")) {
+                                if (headStyle != currentHeadStyle) {
+                                    var hrefStr = "css/head" + headStyle + ".css"
+                                    top.document.getElementById("headStyle").href = hrefStr;
+                                }
                             }
                         }
-                    }
-                    break;
-                case 2:
-                    if (!isHead2Hidden && headStyle == currentHeadStyle) {
                         break;
-                    } else {
-                        $(top.document.getElementsByClassName("page-head1")[0]).hide();
-                        $(top.document.getElementsByClassName("page-head2")[0]).show();
-                        if (!!top.document.getElementById("headStyle")) {
-                            if (headStyle != currentHeadStyle) {
-                                var hrefStr = "css/head" + headStyle + ".css"
-                                top.document.getElementById("headStyle").href = hrefStr;
+                    case 2:
+                        if (!isHead2Hidden && headStyle == currentHeadStyle) {
+                            break;
+                        } else {
+                            pageHead1.setAttribute("hidden", "hidden");
+                            pageHead2.removeAttribute("hidden");
+                            if (!!top.document.getElementById("headStyle")) {
+                                if (headStyle != currentHeadStyle) {
+                                    var hrefStr = "css/head" + headStyle + ".css"
+                                    top.document.getElementById("headStyle").href = hrefStr;
+                                }
                             }
                         }
-                    }
-                    break;
-                default:
-                    break;
+                        break;
+                    default:
+                        break;
+                }
+            }catch(e) {
+
             }
         },
         //根据iframe里面body的高度设置iframe的高度
@@ -500,9 +641,21 @@
             var frame = window.frameElement;
             if (!frame) return false;
             var frameMinHeight = 800;
-            var bodyHeight = document.body.clientHeight;
-            frame.height = bodyHeight < frameMinHeight ? frameMinHeight : bodyHeight;
-        }
+            var obj = new Object();
+            obj = document.getElementById("wrapper");
+            var listHeight = obj.offsetHeight;
+            var bodyHeight = listHeight + 100;
 
+            // var documentHeight = $(document).height();
+            // var setHeight = documentHeight < frameMinHeight ? frameMinHeight : documentHeight;
+            frame.height = bodyHeight < frameMinHeight ? frameMinHeight : bodyHeight;;
+        },
+
+        /*
+         *  设置当前用户的手机号码
+         * */
+        setUserPhone: function(phone){
+            userPhone = phone;
+        }
     };
 })(window, $);
