@@ -33,6 +33,7 @@ public class AuthController {
 	@Autowired
 	private IAuthService authService;
 	
+	@Permission(loginReqired=false)
 	@RequestMapping(value = "/login", method = RequestMethod.POST)
 	public JsonResult login(HttpServletRequest request, @RequestBody Map<String, Object> map) {
 		try {
