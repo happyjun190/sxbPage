@@ -93,8 +93,8 @@ public class AuthController {
 	public JsonResult webLogin(HttpServletRequest request, HttpServletResponse response, @RequestBody Map<String, String> map) {
 		try {
 			//获取验证码的cookie id
-			String captchaCookie = WebUtils.getCookieByName(request, WebConstants.CookieName.Captcha);
-			map.put("captchaCookie", captchaCookie);
+			//String captchaCookie = WebUtils.getCookieByName(request, WebConstants.CookieName.Captcha);
+			//map.put("captchaCookie", captchaCookie);
 			
 			//一些返回的cookie放在response中
 			return authService.webLogin(map, response, true);

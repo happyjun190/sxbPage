@@ -33,7 +33,6 @@ public class EmpManageController {
 	 * @param map
 	 * @return
 	 */
-	@Permission(loginReqired=false)
 	@RequestMapping(value = "/getUserKqInfoList", method = RequestMethod.POST)
 	public JsonResult getUserKqInfoList(HttpServletRequest request, @RequestBody Map<String, Object> map) {
 		try {

@@ -114,7 +114,7 @@ public class AuthService implements IAuthService {
 	public JsonResult webLogin(Map<String, String> map, HttpServletResponse response, boolean captchaRequired) {
 
 		// 检查验证码是否已经被验证过
-		if (captchaRequired) {
+		/*if (captchaRequired) {
 			String cookieId = map.get("captchaCookie");
 			
 			if(StringUtils.isBlank(cookieId)){
@@ -133,7 +133,7 @@ public class AuthService implements IAuthService {
 					return new JsonResult(ReturnCode.ERROR, "登录失败：验证码已经过期！请重新输入。", null);
 				}
 			}
-		}
+		}*/
 
 		// 验证用户名密码
 		String userAccount = map.get("userAccount");
@@ -152,9 +152,9 @@ public class AuthService implements IAuthService {
 		int userId = user.getId();
 		
 		//TODO
-		/*if (!user.getPassword().equals(EncryptUtils.MD5Str(pw + user.getLoginSalt()))) {// 前端送过来的是md5编码后的密码，小写
+		if (!user.getPassword().equals(EncryptUtils.MD5Str(pw))) {// 前端送过来的是md5编码后的密码，小写
 			return new JsonResult(ReturnCode.ERROR, "用户名或密码错误！", null);
-		}*/
+		}
 
 		//TODO
 		// 判断用户是否已经加入药店
@@ -299,7 +299,7 @@ public class AuthService implements IAuthService {
 		if (type < 1 || type > 4)
 			return null;
 		Map<String, Object> map = new HashMap<String, Object>();
-		if (type == 1) { // 手机号码登录
+		/*if (type == 1) { // 手机号码登录
 			map.put("phone", loginAccount);
 		} else if (type == 2) { // 邮箱登录
 			map.put("email", loginAccount);
@@ -307,7 +307,8 @@ public class AuthService implements IAuthService {
 			map.put("qq", loginAccount);
 		} else { // Q药网旧用户
 			map.put("qdrug_acc", loginAccount);
-		}
+		}*/
+		map.put("userAccount", loginAccount);
 		return userDAO.getUserInfo(map);
 	}
 
