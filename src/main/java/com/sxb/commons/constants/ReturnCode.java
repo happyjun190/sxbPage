@@ -29,4 +29,9 @@ public final class ReturnCode {
 	 * 未登录
 	 */
 	public static final String NOTLOGIN = "40020";
+	
+	/**
+	 * 无权限
+	 */
+	public static final String NO_PRIVILEGE = "40030";
 }

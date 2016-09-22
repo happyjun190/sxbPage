@@ -9,6 +9,15 @@ public class TabUser {
 	private int state;
 	private int ctime;
 	private int mtime;
+	
+	private String head_url; // 头像地址
+	private String real_name;
+	private String loginSalt;// 用户密码加密干盐值
+	private String qq;// qq
+	private int isBindqq;// 是否绑定qq
+	private int isBindphone;// 是否绑定手机
+	private int isBindemail;// 是否绑定邮箱
+	
 	public int getId() {
 		return id;
 	}
@@ -56,6 +65,48 @@ public class TabUser {
 	}
 	public void setMtime(int mtime) {
 		this.mtime = mtime;
+	}
+	public String getHead_url() {
+		return head_url;
+	}
+	public void setHead_url(String head_url) {
+		this.head_url = head_url;
+	}
+	public String getReal_name() {
+		return real_name;
+	}
+	public void setReal_name(String real_name) {
+		this.real_name = real_name;
+	}
+	public String getLoginSalt() {
+		return loginSalt;
+	}
+	public void setLoginSalt(String loginSalt) {
+		this.loginSalt = loginSalt;
+	}
+	public String getQq() {
+		return qq;
+	}
+	public void setQq(String qq) {
+		this.qq = qq;
+	}
+	public int getIsBindqq() {
+		return isBindqq;
+	}
+	public void setIsBindqq(int isBindqq) {
+		this.isBindqq = isBindqq;
+	}
+	public int getIsBindphone() {
+		return isBindphone;
+	}
+	public void setIsBindphone(int isBindphone) {
+		this.isBindphone = isBindphone;
+	}
+	public int getIsBindemail() {
+		return isBindemail;
+	}
+	public void setIsBindemail(int isBindemail) {
+		this.isBindemail = isBindemail;
 	}
 	
 }

@@ -10,7 +10,9 @@
         http://www.springframework.org/schema/context 
         http://www.springframework.org/schema/context/spring-context.xsd
         http://www.springframework.org/schema/mvc     
-        http://www.springframework.org/schema/mvc/spring-mvc.xsd">
+        http://www.springframework.org/schema/mvc/spring-mvc.xsd
+       http://www.springframework.org/schema/aop 
+	   http://www.springframework.org/schema/aop/spring-aop.xsd">
 
 
 	<mvc:annotation-driven />
@@ -22,7 +24,7 @@
 	<mvc:resources location="/" mapping="/*.js"/>
 	<mvc:resources location="/web/" mapping="/web/**" />
 	
-	<!-- 方法拦截器(拦截controller包中的所有方法) 
+	<!-- 方法拦截器(拦截controller包中的所有方法)
 	<bean id="controllerMethodInterceptor" class="com.sxb.web.interceptor.ControllerMethodInterceptor">
 	</bean>
 	<aop:config proxy-target-class="true">
@@ -30,6 +32,6 @@
         	@annotation(org.springframework.web.bind.annotation.RequestMapping)"/>
 		<aop:advisor advice-ref="controllerMethodInterceptor" pointcut-ref="controllerMethodPointcut" />
 	</aop:config>
-	-->
+	 -->
 
 </beans>

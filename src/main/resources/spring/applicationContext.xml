@@ -21,7 +21,7 @@
         
     <aop:aspectj-autoproxy/>
 	<!-- 引入属性文件 -->
-	<context:property-placeholder location="classpath:jdbc.properties" />
+	<context:property-placeholder location="classpath:jdbc.properties,classpath:redis.properties" />
 	
 	
 	<import resource="applicationContext-dao.xml" />

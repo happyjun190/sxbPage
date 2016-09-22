@@ -41,29 +41,21 @@ public class SolrWholesaleListAnalysis {
 	private static Workbook workbook = null;
 	private static DataFormatter formatter = null;
 	private static FormulaEvaluator evaluator = null;
-	private static String solrApi = "http://test.ysbang.cn/ysb/servlet/yaomaimai/caigou/v3/getWholesaleListV3/v3100";
+	private static String solrApi = "http://test.ysbang.cn/ysb/servlet/yaomaimai/caigou/v3/getWholesaleListV3/v313000";
 	
 	public static void main(String[] args) {
-		
-		
 		String filePath = "/home/shenjun/Desktop/7月热词-搜索联想调整结果.xlsx";
 		Map<String, String> headerMap = new HashMap<String, String>();
 		headerMap.put("content-type", "application/json");
-		//headerMap.put("Accept", "application/json");
 		Map<String, Object> paramMap = new HashMap<String, Object>();
-		//paramMap.put("authcode", "123456");
 		paramMap.put("format", "json");
-		//paramMap.put("usertoken", "b380586bb4fe411e8bcca5279484d86d");
 		paramMap.put("operationtype", 1);
 		paramMap.put("page", 1);
 		paramMap.put("pageNo", 1);
 		paramMap.put("pagesize", 10);
-		paramMap.put("usertoken", "440d1af19d89407288c2db1cf4c15331");
+		paramMap.put("usertoken", "ac1749cf370b47e6bddcc9ce5208dd63");
     	paramMap.put("authcode", 123456);
 
-//		
-//		HttpHelper httpHelper = new HttpHelper();
-//		httpHelper.setHeaderMap(headerMap);
 		
 		openWorkbook(filePath);
 		
@@ -88,12 +80,6 @@ public class SolrWholesaleListAnalysis {
 				} else {
 					if(cells.length>1) {
 						if(StringUtil.isNotBlank(cells[1])) {
-//							paramMap.put("searchkey", cells[1]);
-//							httpHelper.setUri(solrApi);
-//							httpHelper.setMapParam(paramMap);
-//							CoreFuncReturn returnData = httpHelper.sendPost();
-//							
-//							logger.info(returnData.msg);
 							paramMap.put("searchkey", cells[1]);
 							List<Map<String, Object>> solrData = getSolrWholesaleList(solrApi,paramMap);
 							

@@ -9287,7 +9287,8 @@
 			 *      } );
 			 *    } );
 			 */
-			"sInfo": "Showing _START_ to _END_ of _TOTAL_ entries",
+			//"sInfo": "Showing _START_ to _END_ of _TOTAL_ entries",
+			"sInfo": "显示 _START_ 到 _END_ 总共 _TOTAL_ 条",
 		
 		
 			/**

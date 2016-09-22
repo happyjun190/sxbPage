@@ -48,7 +48,7 @@
 											<fieldset>
 												<label class="block clearfix">
 													<span class="block input-icon input-icon-right">
-														<input type="text" class="form-control" id="username" placeholder="帐号" />
+														<input type="text" class="form-control" id="userAccount" placeholder="帐号" />
 														<i class="icon-user"></i>
 													</span>
 												</label>
@@ -235,12 +235,12 @@
 <script type="text/javascript">
 
 	$(".btn-primary").on("click", function() {
-		var username = $("#username").val();
+		var userAccount = $("#userAccount").val();
 		var password = $("#password").val();
 		sys.ajax({
 			url : "/servlet/auth/login",
 			params:{
-				login: username,
+				userAccount: userAccount,
 				password: password
 			},
 			callback : loginCallBack

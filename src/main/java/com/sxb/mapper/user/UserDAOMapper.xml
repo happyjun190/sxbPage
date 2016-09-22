@@ -6,7 +6,25 @@
 	<!-- 获取用户登陆信息 -->
 	<select id="getUserInfo" resultType="com.sxb.model.user.TabUser">
 		select id,login,password,phone,email,state,ctime,mtime
-		from ts_user where login = #{login}
+		from ts_user where login = #{userAccount}
 	</select>
+	
+	<!-- 通过phone获取用户信息 -->
+	<select id="getUserInfoByPhone" resultType="com.sxb.model.user.TabUser"  parameterType="java.util.HashMap">
+		select id,login,password,login_salt as loginSalt,phone,is_bindphone as isBindphone
+		from ts_user
+		where phone=#{phone} 
+		limit 1
+	</select>
+	
+	<!-- 插入数据库用户表 -->
+	<insert id="addUser">
+		insert into
+		ts_user(login,password,login_salt,email,qq,phone,is_bindemail,is_bindqq,is_bindphone,is_active,is_del,ctime,mtime)
+		values(#{login},#{password},#{loginSalt},#{email},#{qq},#{phone},#{isBindemail},#{isBindqq},#{isBindphone},1,0,UNIX_TIMESTAMP(),UNIX_TIMESTAMP())
+		<selectKey resultType="int" keyProperty="id">
+			SELECT LAST_INSERT_ID()
+		</selectKey>
+	</insert>
 	
 </mapper>
