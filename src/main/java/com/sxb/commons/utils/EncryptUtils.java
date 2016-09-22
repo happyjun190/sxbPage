@@ -10,7 +10,7 @@ import org.apache.commons.lang3.RandomStringUtils;
 /**
  * 加密工具
  * 
- * @author wangchun
+ * @author shenjun
  * @date 2015年1月16日
  */
 public class EncryptUtils {

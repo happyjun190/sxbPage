@@ -20,7 +20,7 @@ import com.sxb.commons.utils.WebUtils;
 /**
  * 拦截器：统一检查authcode和usertoken，记录接口调用日志
  * 
- * @author XuJijun
+ * @author shenjunhenjun
  * 
  */
 public class ControllerMethodInterceptor extends BaseInterceptor implements MethodInterceptor {
@@ -35,12 +35,12 @@ public class ControllerMethodInterceptor extends BaseInterceptor implements Meth
 	 * 4、统一捕获异常，并返回ReturnCode.EXCEPTION给前端
 	 * 5、记录接口调用日志：数据库记录会截取超长参数，文本log会抛弃图片的base64编码
 	 * 
-	 * @author XuJijun
+	 * @author shenjun
 	 * @param MethodInvocation 被拦截的方法
 	 */
 	@Override
 	public Object invoke(MethodInvocation invocation) throws Throwable {
-		long beginTime = System.currentTimeMillis();
+		//long beginTime = System.currentTimeMillis();
 		int userIdInt = -1; //缺省的userId
 		String userId=null;
 		//TabUserOpLog userOpLog = new TabUserOpLog();

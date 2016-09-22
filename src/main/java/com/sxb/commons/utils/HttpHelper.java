@@ -67,7 +67,7 @@ public class HttpHelper {
 	 * 以MAP的方式设置header，如：
 	 * ("Content-type", "application/json");
 	 * ("Accept", "application/json");
-	 * @author XuJijun
+	 * @author shenjun
 	 * @param headerMap
 	 */
 	public void setHeaderMap(Map<String, String> headerMap) {
@@ -214,7 +214,7 @@ public class HttpHelper {
 	
 	/**
 	 * 转换Stream为字符串
-	 * @author XuJijun
+	 * @author shenjun
 	 * @param is
 	 * @return
 	 * @throws UnsupportedEncodingException 

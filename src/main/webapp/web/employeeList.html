@@ -178,7 +178,13 @@
 	<script type="text/javascript">
 		//页面加载时加载js函数
 		$(function(){
-			//sys.refresh("pageContent");// F5刷新本页面
+			/* setInterval(function() {
+				//sys.refresh("pageContent");// F5刷新本页面
+				sys.ajax({
+					url : "/servlet/empmanage/getUserKqInfoList",
+					callback : getUserKqInfoListCallBack
+				});
+			},5) */
 			sys.ajax({
 				url : "/servlet/empmanage/getUserKqInfoList",
 				callback : getUserKqInfoListCallBack

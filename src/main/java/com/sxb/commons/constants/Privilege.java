@@ -2,7 +2,7 @@ package com.sxb.commons.constants;
 
 /**
  * 用户权限：定义用户权限，ts_sys_dict表中的PRIV_TIPS定义了没权限的提示语
- * @author XuJijun
+ * @author shenjun
  *
  */
 public enum Privilege {

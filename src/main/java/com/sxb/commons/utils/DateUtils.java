@@ -177,7 +177,7 @@ public class DateUtils {
     /**
      * 将当前日期转换成Int类型，便于插入数据库中
      * @return int (长度10位)
-     * @author zhangzhang
+     * @author shenjun
      */
      public static int dateToInt(){
     	return  (int) (dateToUnixTimestamp() / 1000);

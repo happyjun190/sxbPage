@@ -18,7 +18,7 @@ import com.sxb.service.commons.IUserService;
 /**
  * 拦截器基类：定义一些通用的方法
  * 
- * @author XuJijun
+ * @author shenjun
  * 
  */
 public class BaseInterceptor {

@@ -6,7 +6,7 @@ package com.sxb.commons.alipay.util;
 
 /**
  * 字符串处理的工具类 
- * @author stone.zhangjl
+ * @author shenjun
  * @version $Id: StringUtil.java, v 0.1 2008-8-21 上午10:47:41 stone.zhangjl Exp $
  */
 public class StringUtil {

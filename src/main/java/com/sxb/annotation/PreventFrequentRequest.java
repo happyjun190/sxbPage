@@ -7,7 +7,7 @@ import java.lang.annotation.Target;
 
 /**
  * 防止频繁地访问
- * @author XuJijun
+ * @author shenjun
  *
  */
 @Retention(RetentionPolicy.RUNTIME)

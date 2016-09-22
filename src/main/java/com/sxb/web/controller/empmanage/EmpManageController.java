@@ -13,7 +13,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.sxb.annotation.Permission;
 import com.sxb.commons.constants.ReturnCode;
 import com.sxb.commons.json.JsonResult;
 import com.sxb.service.empmanage.IEmpManageService;

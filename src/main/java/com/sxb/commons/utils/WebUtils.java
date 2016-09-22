@@ -61,7 +61,7 @@ public class WebUtils {
 	
 	/**
 	 * 获取HttpRequest中的所有Headers
-	 * @author XuJijun
+	 * @author shenjun
 	 * @param HttpServletRequest
 	 * @return
 	 */
@@ -159,7 +159,7 @@ public class WebUtils {
 	 * - 随机颜色的小字符做背景干扰
 	 * - 根据字符大小自动调整图片大小、自动计算干扰字符的个数
 	 * 
-	 * @author XuJijun
+	 * @author shenjun
 	 *  
 	 * @param captcha
 	 * @return

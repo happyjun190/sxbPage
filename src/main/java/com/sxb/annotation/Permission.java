@@ -9,7 +9,7 @@ import com.sxb.commons.constants.Privilege;
 
 /**
  * 权限控制
- * @author XuJijun
+ * @author shenjun
  *
  */
 @Retention(RetentionPolicy.RUNTIME)
