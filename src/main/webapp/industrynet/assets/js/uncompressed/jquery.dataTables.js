@@ -9307,7 +9307,7 @@
 			 *      } );
 			 *    } );
 			 */
-			"sInfoEmpty": "Showing 0 to 0 of 0 entries",
+			"sInfoEmpty": "显示 0 至 0 总共 0 记录",
 		
 		
 			/**
