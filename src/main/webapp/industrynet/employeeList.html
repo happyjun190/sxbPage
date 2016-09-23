@@ -1,0 +1,370 @@
+<!DOCTYPE html>
+<html lang="cn">
+	<head>
+		<meta charset="utf-8" />
+		<title>易聆科管理系统</title>
+
+		<meta name="description" content="Static &amp; Dynamic Tables" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<link href="assets/css/bootstrap.min.css" rel="stylesheet" />
+		<link rel="stylesheet" href="assets/css/font-awesome.min.css" />
+		<link rel="stylesheet" href="assets/css/ace-fonts.css" />
+		<link rel="stylesheet" href="assets/css/ace.min.css" />
+		<link rel="stylesheet" href="assets/css/ace-rtl.min.css" />
+		<link rel="stylesheet" href="assets/css/ace-skins.min.css" />
+		<link rel="stylesheet" href="js/widget/dialog/ysbpc-dialog.css">
+		
+		<script src="assets/js/ace-extra.min.js"></script>
+		
+		<script type="text/javascript" src='js/jquery.min.js'></script>
+		<script type="text/javascript" src='js/bootstrap.min.js'></script>
+		<script src="js/template.js"></script>
+		<script src="js/sys.js"></script>
+		
+		<script src="js/widget/dialog/ysbpc-dialog-norequire.js"></script>
+		
+		<!-- indexJs -->
+		<script src="js/indexCommon.js"></script>
+		
+	</head>
+
+	<body id="employeeBody">
+		<div class="main-container-inner">
+			<div class="breadcrumbs" id="breadcrumbs">
+				<script type="text/javascript">
+					try{ace.settings.check('breadcrumbs' , 'fixed')}catch(e){}
+				</script>
+
+				<ul class="breadcrumb">
+					<li>
+						<i class="icon-home home-icon"></i>
+						<a href="#">首页</a>
+					</li>
+					<li class="active"> 人员考勤记录 </li>
+				</ul>
+			</div>
+			<div class="page-content">
+				<div class="row">
+					<div class="col-xs-12">
+						<div class="row">
+							<div class="col-xs-12">
+								<h3 class="header smaller lighter blue">在职人员考情记录</h3>
+								<div class="table-header">
+									最近一个月考情记录
+								</div>
+
+								<div class="table-responsive">
+									<table id="sample-table-1" class="table table-striped table-bordered tab le-hover">
+										<thead>
+											<tr>
+												<th class="center">
+													<label>
+														<input type="checkbox" class="ace" />
+														<span class="lbl"></span>
+													</label>
+												</th>
+												<th>姓名</th>
+												<th>职位</th>
+												<th class="hidden-480">住址</th>
+												<th>
+													<i class="icon-time bigger-110 hidden-480"></i>
+													上班时间
+												</th>
+												<th>
+													<i class="icon-time bigger-110 hidden-480"></i>
+													下班时间
+												</th>
+												<th>操作</th>
+											</tr>
+										</thead>
+										<tbody id="userKqTbody">
+										</tbody>
+									</table>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		
+		<script src="assets/js/bootstrap.min.js"></script>
+		<script src="assets/js/typeahead-bs2.min.js"></script>
+		
+		<!-- 分页控件 -->
+		<script src="assets/js/jquery.dataTables.min.js"></script>
+		<script src="assets/js/jquery.dataTables.bootstrap.js"></script>
+		
+		<!-- ace scripts -->
+		<script src="assets/js/ace-elements.min.js"></script>
+		<script src="assets/js/ace.min.js"></script>
+
+	</body>
+	
+	<script id="T-userKqTbody" type="text/html">
+	{{each data.userKqInfoList as userKqInfo }}
+		<tr>
+			<td class="center">
+				<label>
+					<input type="checkbox" class="ace" />
+					<span class="lbl"></span>
+				</label>
+			</td>
+		
+			<td>
+				<a href="#">{{userKqInfo.user_name}}</a>
+			</td>
+			<td>{{userKqInfo.position}}</td>
+			<td>{{userKqInfo.address}}</td>
+			<td>{{userKqInfo.ctimeStr}}</td>
+			<td>{{userKqInfo.mtimeStr}}</td>
+			
+		
+			<td>
+				<div class="visible-md visible-lg hidden-sm hidden-xs action-buttons operationDiv" 
+					 itemId="{{userKqInfo.id}}" userName="{{userKqInfo.user_name}}"
+					 position="{{userKqInfo.position}}" address="{{userKqInfo.address}}">
+	
+					<a class="blue showItem" href="javascript:;">
+						<i class="icon-zoom-in bigger-130"></i>
+					</a>
+		
+					<a class="green editItem"  href='javascript:;'>
+						<i class="icon-pencil bigger-130"></i>
+					</a>
+		
+					<a class="red deleteItem" href='javascript:;'>
+						<i class="icon-trash bigger-130"></i>
+					</a>
+				</div>
+			</td>
+		</tr>
+	{{/each}}
+	</script>
+	
+	
+	<!-- 提示内容模板 -->
+	<script id="T-tipContent" type="text/html">
+	{{each underDeliveryFloorData as floorInfo}}
+		<div class="tipContent-div">
+			<p class="companyName">{{floorInfo.providerName}}</span></p>
+			<p class="sendStandard">还差{{floorInfo.floorGap}}元</p>
+		</div>
+	{{/each}}
+	<p class="tipGrey">每个商家的下单金额累计满起送金额才能配送，记得再多下点哦</p>
+	</script>
+	
+	
+	<script id="T-editUserKqInfo" type="text/html">
+	<form id="editUserKqInfo">
+		<div class="form-group">
+			<label class="col-sm-3 control-label no-padding-right" for="form-field-1"> 姓名 </label>
+			<div class="col-sm-9">
+				<input type="text" id="form-field-1" value="{{userName}}" class="col-xs-10 col-sm-5" />
+			</div>
+			<label class="col-sm-3 control-label no-padding-right" for="form-field-1"> 职位 </label>
+			<div class="col-sm-9">
+				<input type="text" id="form-field-1" value="{{position}}" class="col-xs-10 col-sm-5" />
+			</div>
+			<label class="col-sm-3 control-label no-padding-right" for="form-field-1"> 地址 </label>
+			<div class="col-sm-9">
+				<input type="text" id="form-field-1" value="{{address}}" class="col-xs-10 col-sm-5" />
+			</div>
+		</div>
+	<form>
+	</script>
+	
+		
+	<script type="text/javascript">
+		//页面加载时加载js函数
+		$(function(){
+			/* setInterval(function() {
+				//sys.refresh("pageContent");// F5刷新本页面
+				sys.ajax({
+					url : "/servlet/empmanage/getUserKqInfoList",
+					callback : getUserKqInfoListCallBack
+				});
+			},5) */
+			sys.ajax({
+				url : "/servlet/empmanage/getUserKqInfoList",
+				callback : getUserKqInfoListCallBack
+			});
+		});
+		
+		function getUserKqInfoListCallBack(result) {
+			
+			var data = result.data;
+			//获取模板html前,修改data数据(添加属性)
+			//循环供应商列表
+			var ctimeStr;
+			var mtimeStr;
+			$.each(data.userKqInfoList, function(n){
+				ctimeStr = "";
+				mtimeStr = "";
+				//时间戳转换成yyyy年yy月dd日
+				var userKqInfo = data.userKqInfoList[n];
+				var date1 = new Date(userKqInfo.ctime*1000);
+				ctimeStr = ctimeStr+date1.getFullYear()+"年";
+				ctimeStr = ctimeStr+date1.getMonth()+"月";
+				ctimeStr = ctimeStr+date1.getDate()+"日 ";
+				ctimeStr = ctimeStr+date1.getHours()+"时";
+				ctimeStr = ctimeStr+date1.getMinutes()+"分";
+				userKqInfo.ctimeStr = ctimeStr;
+				
+				var date2 = new Date(userKqInfo.ctime*1000);
+				mtimeStr = mtimeStr+date2.getFullYear()+"年";
+				mtimeStr = mtimeStr+date2.getMonth()+"月";
+				mtimeStr = mtimeStr+date2.getDate()+"日 ";
+				mtimeStr = mtimeStr+date2.getHours()+"时";
+				mtimeStr = mtimeStr+date2.getMinutes()+"分";
+				userKqInfo.mtimeStr = mtimeStr;
+			});
+			
+			var html;
+			html = template('T-userKqTbody', result);
+			$("#userKqTbody").html(html);
+			onLoad();
+		}
+		
+		//分页初始化(在加载完页面后调用)
+		function onLoad() {
+			var oTable1 = $('#sample-table-1').dataTable( {
+				"aoColumns": [
+			      { "bSortable": false },
+			      null, null,null, null, null,
+				  { "bSortable": false }
+				] } );
+				
+				$('table th input:checkbox').on('click' , function(){
+					var that = this;
+					$(this).closest('table').find('tr > td:first-child input:checkbox')
+					.each(function(){
+						this.checked = that.checked;
+						$(this).closest('tr').toggleClass('selected');
+					});
+						
+				});
+		}
+		
+		$('[data-rel="tooltip"]').tooltip({placement: tooltip_placement});
+		function tooltip_placement(context, source) {
+			var $source = $(source);
+			var $parent = $source.closest('table')
+			var off1 = $parent.offset();
+			var w1 = $parent.width();
+	
+			var off2 = $source.offset();
+			var w2 = $source.width();
+	
+			if( parseInt(off2.left) < parseInt(off1.left) + parseInt(w1 / 2) ) return 'right';
+			return 'left';
+		}
+		
+		
+		//删除某条记录
+		$("#employeeBody").on('click','.deleteItem',function(){
+			var templateData = new Object();
+			var deliveryFloorInfo = new Object();
+			var underDeliveryFloorData = new Object();
+			deliveryFloorInfo.floorGap = 1000;
+			deliveryFloorInfo.providerName = "中国联通"
+			underDeliveryFloorData[0] = deliveryFloorInfo;
+			
+			templateData.underDeliveryFloorData = underDeliveryFloorData;
+			var contentHtml = template("T-tipContent",templateData);
+			parent.commonDialog.showModal({
+				//'top':sys.getWindowHeight()/2,
+				'top':getScrollTop1()+300,
+				'width': 500,
+				'height': 'auto',
+				'title': "温馨提示",
+				'content': "<div style='text-align: left; padding: 10px 25px;'>"+contentHtml+"</div>",
+				'cancelText':'',
+				'okText': '我知道了',
+				//'okHandler':commitOrder(orderData, providerDrugInfoList)
+				'okHandler':commitOrder,
+				'cancelText':"取消"
+	            //'cancelHandler':null
+			});
+		});
+		
+		
+		//修改某条记录
+		$("#employeeBody").on('click','.editItem',function(){
+			var userKqInfo = new Object();
+			
+			var itemId = $($(this).parents(".operationDiv")).attr("itemId");
+			var userName = $($(this).parents(".operationDiv")).attr("userName");
+			var position = $($(this).parents(".operationDiv")).attr("position");
+			var address = $($(this).parents(".operationDiv")).attr("address");
+			var ctime = $($(this).parents(".operationDiv")).attr("ctime");
+			var mtime = $($(this).parents(".operationDiv")).attr("mtime");
+			
+			userKqInfo.itemId = itemId;
+			userKqInfo.userName = userName;
+			userKqInfo.position = position;
+			userKqInfo.address = address;
+			userKqInfo.ctime = ctime;
+			userKqInfo.mtime = mtime;
+			
+			var contentHtml = template("T-editUserKqInfo",userKqInfo);
+			
+			parent.commonDialog.showModal({
+				//'top':sys.getWindowHeight()/2,
+				'top':getScrollTop1()+300,
+				'width': 500,
+				'height': 'auto',
+				'title': "温馨提示",
+				'content': "<div style='text-align: left; padding: 10px 25px;'>"+contentHtml+"</div>",
+				'cancelText':'',
+				'okText': '保存',
+				//'okHandler':commitOrder(orderData, providerDrugInfoList)
+				'okHandler':editUserKqInfo,
+				'cancelText':"取消"
+	            //'cancelHandler':null
+			});
+		});
+		
+		
+		
+		function getScrollTop1() {
+		    if ('pageYOffset' in parent.window) {
+		        return parent.window.pageYOffset;
+		    } else if (parent.document.compatMode === "BackCompat") {
+		        return parent.document.body.scrollTop;
+		    } else {
+		        return parent.document.documentElement.scrollTop;
+		    }
+		}
+		
+		function commitOrder() {
+		}
+		
+		
+		function editUserKqInfo() {
+			var formData = new FormData($('form')[0]);
+			sys.ajaxFile("/servlet/empmanage/editUserKqInfo", formData, {
+				/* 
+				callback : function() {
+					location.href = "credit-step3.html";
+				},
+				errorCallback : function(result) {
+					//恢复提交按钮
+					$(".submit").attr("value", "提 交");
+					$(".submit").removeAttr("disabled");
+					//进度条隐藏
+					$('.progressbar').hide();
+					$('#progress').hide();
+					alert(result.message);
+				}, */
+				progressCallback : editUserKqInfoCallBack
+			});
+			
+		}
+		
+		
+		function editUserKqInfoCallBack() {
+			alert("修改记录成功");
+		}
+	</script>
+</html>

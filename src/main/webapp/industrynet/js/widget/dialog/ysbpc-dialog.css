@@ -1,0 +1,102 @@
+/*
+ * Copyright (c) 速道信息科技
+ *  Date : 2016.
+ * Author : llz
+ */
+
+.ysbpcdialog_mask{
+    width: 100%;
+    height: 100%;
+    background: #000;
+    opacity: .3;
+    filter: alpha(opacity=30);
+    position: absolute;
+    left: 0;
+    top: 0;
+    z-index: 1000;
+
+}
+
+.ysbpcdialog_wrapper {
+    text-align: center;
+    border: 1px #ccc solid;
+    position: absolute;
+    z-index: 1000;
+    background: #FFFfff;
+    font-size: 14px;
+    border-radius: 5px;
+}
+
+.ysbpcdialog_title{
+    color: #565a5c;
+    background-color: #307ecc;
+    text-align: left;
+}
+.title-content {
+    margin-left: 10px;
+}
+.title-close {
+    float: right;
+    margin-right: 15px;
+    position:relative;
+    z-index: 100;
+}
+.ysbpcdialog_content_wrapper {
+    /*position: absolute;*/
+    /*top: 50%;*/
+    /*margin-top: -50%;*/
+    width:100%;
+    display: table;
+    text-align: center;
+}
+
+.ysbpcdialog_content{
+    width:100%;
+    margin: 0 auto;
+    display: table-cell;
+    text-align: left;
+    vertical-align: middle;
+    color: #565a5c;
+    font-size: 14px;
+    padding-left: 10px;
+}
+
+.ysbpcdialog_footer {	
+    border-top: solid 1px #CCCCCC;
+
+}
+
+
+.ysbpcdialog_button {
+    display: inline-block;
+    text-align: center;
+    vertical-align: middle;
+    color:#fff;
+    border-radius: 5px;
+    border: none;
+    text-decoration: none;
+}
+
+.ysbpcdialog_button:hover{
+    color: #fff;
+    text-decoration:none;/*指鼠标在链接*/
+}
+.ysbpcdialog_button:active{
+    color: #fff;
+    text-decoration:none;/* 指正在点的链接*/
+}
+
+.ysbpcdialog_button_ok {
+    background-color: #FC894B;
+}
+
+.ysbpcdialog_button_cancel {
+    background-color: #CCCCCC;
+}
+
+.tipContent-div{ float: left; width: 100%; margin-bottom: 5px; }
+.tipContent-div p{ margin: 3px; }
+.companyName{ font-size: 16px; color: #3c3c3c; }
+.companyName span{ color: #ff8a4d; }
+.sendStandard{  font-size: 16px; color: #ff8a4d; }
+.tipGrey{ font-size: 14px; color: #999999; }

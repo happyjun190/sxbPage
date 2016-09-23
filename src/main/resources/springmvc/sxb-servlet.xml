@@ -23,6 +23,8 @@
 	<mvc:resources location="/" mapping="/*.html"/>
 	<mvc:resources location="/" mapping="/*.js"/>
 	<mvc:resources location="/web/" mapping="/web/**" />
+	<!-- 工业物联网模块 -->
+	<mvc:resources location="/industrynet/" mapping="/industrynet/**" />
 	
 	<!-- 方法拦截器(拦截controller包中的所有方法) -->
 	<bean id="controllerMethodInterceptor" class="com.sxb.web.interceptor.ControllerMethodInterceptor">
