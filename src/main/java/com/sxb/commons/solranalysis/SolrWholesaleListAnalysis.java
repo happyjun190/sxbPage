@@ -54,8 +54,8 @@ public class SolrWholesaleListAnalysis {
 		paramMap.put("operationtype", 1);
 		paramMap.put("page", 1);
 		paramMap.put("pageNo", 1);
-		paramMap.put("pagesize", 10);
-		paramMap.put("usertoken", "c7e85a864f474434ab84bad84fbbf8cd");
+		paramMap.put("pagesize", 30);
+		paramMap.put("usertoken", "42865a3054314c2d915efe7ff5de6b74");
     	paramMap.put("authcode", 123456);
 
 		
