@@ -44,7 +44,6 @@ public class SolrWholesaleListAnalysis {
 	//private static String solrApi = "http://test.ysbang.cn/ysb/servlet/yaomaimai/caigou/v3/getWholesaleListV3/v3100";
 	private static String solrApi = "http://test.ysbang.cn/ysb/servlet/yaomaimai/caigou/v3/getWholesaleListV3/v313000";
 	
-	@SuppressWarnings("unchecked")
 	public static void main(String[] args) {
 		String filePath = "/home/shenjun/Desktop/7月热词-搜索联想调整结果.xlsx";
 		Map<String, String> headerMap = new HashMap<String, String>();
@@ -55,13 +54,10 @@ public class SolrWholesaleListAnalysis {
 		paramMap.put("page", 1);
 		paramMap.put("pageNo", 1);
 		paramMap.put("pagesize", 30);
-		paramMap.put("usertoken", "42865a3054314c2d915efe7ff5de6b74");
+		paramMap.put("usertoken", "662d78e8ed134dda8dcc6978f283d464");
     	paramMap.put("authcode", 123456);
-
 		
 		openWorkbook(filePath);
-		
-		
 
 		String[] cells = null;
 		Sheet sheet = null;
@@ -70,28 +66,7 @@ public class SolrWholesaleListAnalysis {
 		//获取第一个sheet页数据
 		sheet = workbook.getSheetAt(0);
 		
-		int id = 0;//活动id
-		String abbreviation = null;//供应商
-		String drugname = null;//药品名称
-		//String manufacturer = null;//厂商
-		//int joinstatus = 0;//加入购物车状态  0未加入  1已加入
-		//String control_info= null;//控销语
-		//int is_control = 0;//0非控销 1控销
-		String specification = null;//规格
-		String minprice = null;//最低价
-		String	 maxprice = null;//最高价
-		String druginfo_price = null;//平均价格
-		int uv = 0;//用户浏览量
-		int pv = 0;//页面访问量
-		int order_amount = 0;//订单量
-		String dis_type = "0";//促销类型(0 无促销  1满额促销 2限量促销 3赠品)
-		int providerType = 0;//0 爆款 1非爆款
-		int stockAvailable= 0;//库存数量 joinCarMap.stockAvailable
-		String stockStatus = null;//库存状态 joinCarMap.stockStatus
-		Map<String, Object> joinCarMap = null;
-		
-		
-		System.out.println("搜索关键字,活动id,供应商,药品名,规格,最低价,最高价,平均价格,用户浏览量(uv),页面访问量(pv),销量,促销类型,爆款类型,库存数量,库存状态");
+		System.out.println("搜索关键字,活动id,药品id,供应商,药品名,规格,单价(unit_price),平均价格(druginfo_price),用户浏览量(uv),页面访问量(pv),销量,促销类型,爆款类型,库存数量,库存状态");
 		//解析行数据
 		if (sheet.getPhysicalNumberOfRows() > 0) {
 			for (int i = 0; i <= sheet.getLastRowNum(); i++) {
@@ -103,91 +78,15 @@ public class SolrWholesaleListAnalysis {
 					continue;
 				} else {
 					if(cells.length>1) {
+						if(StringUtil.isNotBlank(cells[0])) {
+							paramMap.put("searchkey", cells[0]);
+							List<Map<String, Object>> solrData = getSolrWholesaleList(solrApi,paramMap);
+							printDruginfo(solrData, cells[0]);
+						}
 						if(StringUtil.isNotBlank(cells[1])) {
 							paramMap.put("searchkey", cells[1]);
 							List<Map<String, Object>> solrData = getSolrWholesaleList(solrApi,paramMap);
-							
-							
-							for(Map<String, Object> wholesaleMap : solrData) {
-								System.out.print(cells[1]+",");
-		                		/*for(String mapKey:wholesaleMap.keySet()) {
-		                			if(wholesaleMap.get(mapKey)!=null&&!"joinCarMap".equals(mapKey)) {
-		                				System.out.print(wholesaleMap.get(mapKey).toString()+",");
-		                				//logger.info("mapKey:{},=====mapValue:{} ", mapKey,wholesaleMap.get(mapKey).toString());
-		                			} else {
-		                				System.out.print("暂无数据"+",");
-		                			}
-		                		}*/
-								id = wholesaleMap.get("wholesaleid")!=null?Integer.parseInt(wholesaleMap.get("wholesaleid").toString()):0;
-								abbreviation = wholesaleMap.get("abbreviation")!=null?wholesaleMap.get("abbreviation").toString():"~";
-								drugname = wholesaleMap.get("drugname")!=null?wholesaleMap.get("drugname").toString():"~";
-								//manufacturer = wholesaleMap.get("manufacturer")!=null?wholesaleMap.get("manufacturer").toString():"~";
-								//joinstatus = wholesaleMap.get("joinstatus")!=null?Integer.parseInt(wholesaleMap.get("joinstatus").toString()):0;
-								//control_info = wholesaleMap.get("control_info")!=null?wholesaleMap.get("control_info").toString():"~";
-								//is_control = wholesaleMap.get("is_control")!=null?Integer.parseInt(wholesaleMap.get("is_control").toString()):0;
-								specification = wholesaleMap.get("specification")!=null?wholesaleMap.get("specification").toString():"~";
-								minprice = wholesaleMap.get("minprice")!=null?String.valueOf(wholesaleMap.get("minprice")):"~";
-								maxprice = wholesaleMap.get("maxprice")!=null?String.valueOf(wholesaleMap.get("maxprice")):"~";
-								druginfo_price = wholesaleMap.get("druginfo_price")!=null?String.valueOf(wholesaleMap.get("druginfo_price")):"~";
-								uv = wholesaleMap.get("uv")!=null?Integer.parseInt(wholesaleMap.get("uv").toString()):0;
-								pv = wholesaleMap.get("pv")!=null?Integer.parseInt(wholesaleMap.get("pv").toString()):0;
-								order_amount = wholesaleMap.get("order_amount")!=null?Integer.parseInt(wholesaleMap.get("order_amount").toString()):0;
-								//dis_type = (String) wholesaleMap.getOrDefault("dis_type","0");
-								dis_type = wholesaleMap.get("dis_type")!=null?wholesaleMap.get("dis_type").toString():"0";
-								providerType = wholesaleMap.get("providerType")!=null?Integer.parseInt(wholesaleMap.get("providerType").toString()):0;
-								
-								joinCarMap = wholesaleMap.get("joinCarMap")!=null?(Map<String, Object>) wholesaleMap.get("joinCarMap"):new HashMap<String, Object>();
-								stockStatus = joinCarMap.get("stockStatus")!=null?String.valueOf(joinCarMap.get("stockStatus")):"~";
-								stockAvailable = joinCarMap.get("stockAvailable")!=null?Integer.parseInt(joinCarMap.get("stockAvailable").toString()):0;
-								
-								System.out.print(id+",");
-								System.out.print(abbreviation+",");
-								System.out.print(drugname+",");
-								/*System.out.print(manufacturer+",");
-								//加入购物车状态  0未加入  1已加入
-								if(joinstatus==0) {
-									System.out.print("未加入,");
-								} else {
-									System.out.print("已加入,");
-								}
-								System.out.print(control_info+",");
-								if(is_control==0) {
-									System.out.print("非控销,");
-								} else {
-									System.out.print("控销,");
-								}*/
-								System.out.print(specification+",");
-								System.out.print(minprice+",");
-								System.out.print(maxprice+",");
-								System.out.print(druginfo_price+",");
-								System.out.print(uv+",");
-								System.out.print(pv+",");
-								System.out.print(order_amount+",");
-								//促销类型(0 无促销  1满额促销 2限量促销 3赠品)
-								if("0".equals(dis_type)) {
-									System.out.print("无促销,");
-								} else if("1".equals(dis_type)) {
-									System.out.print("满额促销,");
-								} else if("2".equals(dis_type)) {
-									System.out.print("限量促销,");
-								} else {
-									System.out.print("赠品,");
-								}
-								
-								//0 爆款 1非爆款
-								if(providerType==0) {
-									System.out.print("爆款,");
-								} else {
-									System.out.print("非爆款,");
-								}
-								System.out.print(stockAvailable+",");
-								System.out.print(stockStatus+",");
-		                		System.out.println();
-		                	}
-		                	
-//		                	logger.info("HTTP请求数据成功,服务器正常返回,code:"+code);
-							
-							
+							printDruginfo(solrData, cells[1]);
 						}
 					}
 				}
@@ -201,7 +100,114 @@ public class SolrWholesaleListAnalysis {
 			}
 		}
 		
+	}
+	
+	
+	@SuppressWarnings("unchecked")
+	private static void printDruginfo(List<Map<String, Object>> solrData, String searchKey) {
 		
+		int id = 0;//活动id
+		int drugId = 0;//药品id
+		String abbreviation = null;//供应商
+		String drugname = null;//药品名称
+		//String manufacturer = null;//厂商
+		//int joinstatus = 0;//加入购物车状态  0未加入  1已加入
+		//String control_info= null;//控销语
+		//int is_control = 0;//0非控销 1控销
+		String specification = null;//规格
+		/*String minprice = null;//最低价
+		String maxprice = null;//最高价*/		
+		String unitPice = null;//unit_price
+		String druginfo_price = null;//平均价格
+		int uv = 0;//用户浏览量
+		int pv = 0;//页面访问量
+		int order_amount = 0;//订单量
+		String dis_type = "0";//促销类型(0 无促销  1满额促销 2限量促销 3赠品)
+		int providerType = 0;//0 爆款 1非爆款
+		int stockAvailable= 0;//库存数量 joinCarMap.stockAvailable
+		String stockStatus = null;//库存状态 joinCarMap.stockStatus
+		Map<String, Object> joinCarMap = null;
+		
+		for(Map<String, Object> wholesaleMap : solrData) {
+			System.out.print(searchKey+",");
+    		/*for(String mapKey:wholesaleMap.keySet()) {
+    			if(wholesaleMap.get(mapKey)!=null&&!"joinCarMap".equals(mapKey)) {
+    				System.out.print(wholesaleMap.get(mapKey).toString()+",");
+    				//logger.info("mapKey:{},=====mapValue:{} ", mapKey,wholesaleMap.get(mapKey).toString());
+    			} else {
+    				System.out.print("暂无数据"+",");
+    			}
+    		}*/
+			id = wholesaleMap.get("wholesaleid")!=null?Integer.parseInt(wholesaleMap.get("wholesaleid").toString()):0;
+			drugId = wholesaleMap.get("drug_id")!=null?Integer.parseInt(wholesaleMap.get("drug_id").toString()):0;
+			abbreviation = wholesaleMap.get("abbreviation")!=null?wholesaleMap.get("abbreviation").toString():"~";
+			drugname = wholesaleMap.get("drugname")!=null?wholesaleMap.get("drugname").toString():"~";
+			//manufacturer = wholesaleMap.get("manufacturer")!=null?wholesaleMap.get("manufacturer").toString():"~";
+			//joinstatus = wholesaleMap.get("joinstatus")!=null?Integer.parseInt(wholesaleMap.get("joinstatus").toString()):0;
+			//control_info = wholesaleMap.get("control_info")!=null?wholesaleMap.get("control_info").toString():"~";
+			//is_control = wholesaleMap.get("is_control")!=null?Integer.parseInt(wholesaleMap.get("is_control").toString()):0;
+			specification = wholesaleMap.get("specification")!=null?wholesaleMap.get("specification").toString():"~";
+			unitPice = wholesaleMap.get("unit_price")!=null?String.valueOf(wholesaleMap.get("unit_price")):"~";
+			/*minprice = wholesaleMap.get("minprice")!=null?String.valueOf(wholesaleMap.get("minprice")):"~";
+			maxprice = wholesaleMap.get("maxprice")!=null?String.valueOf(wholesaleMap.get("maxprice")):"~";*/
+			druginfo_price = wholesaleMap.get("druginfo_price")!=null?String.valueOf(wholesaleMap.get("druginfo_price")):"~";
+			uv = wholesaleMap.get("uv")!=null?Integer.parseInt(wholesaleMap.get("uv").toString()):0;
+			pv = wholesaleMap.get("pv")!=null?Integer.parseInt(wholesaleMap.get("pv").toString()):0;
+			order_amount = wholesaleMap.get("order_amount")!=null?Integer.parseInt(wholesaleMap.get("order_amount").toString()):0;
+			//dis_type = (String) wholesaleMap.getOrDefault("dis_type","0");
+			dis_type = wholesaleMap.get("dis_type")!=null?wholesaleMap.get("dis_type").toString():"0";
+			providerType = wholesaleMap.get("providerType")!=null?Integer.parseInt(wholesaleMap.get("providerType").toString()):0;
+			
+			joinCarMap = wholesaleMap.get("joinCarMap")!=null?(Map<String, Object>) wholesaleMap.get("joinCarMap"):new HashMap<String, Object>();
+			stockStatus = joinCarMap.get("stockStatus")!=null?String.valueOf(joinCarMap.get("stockStatus")):"~";
+			stockAvailable = joinCarMap.get("stockAvailable")!=null?Integer.parseInt(joinCarMap.get("stockAvailable").toString()):0;
+			
+			System.out.print(id+",");
+			System.out.print(drugId+",");
+			System.out.print(abbreviation+",");
+			System.out.print(drugname+",");
+			/*System.out.print(manufacturer+",");
+			//加入购物车状态  0未加入  1已加入
+			if(joinstatus==0) {
+				System.out.print("未加入,");
+			} else {
+				System.out.print("已加入,");
+			}
+			System.out.print(control_info+",");
+			if(is_control==0) {
+				System.out.print("非控销,");
+			} else {
+				System.out.print("控销,");
+			}*/
+			System.out.print(specification+",");
+			/*System.out.print(minprice+",");
+			System.out.print(maxprice+",");*/
+			System.out.print(unitPice+",");
+			System.out.print(druginfo_price+",");
+			System.out.print(uv+",");
+			System.out.print(pv+",");
+			System.out.print(order_amount+",");
+			//促销类型(0 无促销  1满额促销 2限量促销 3赠品)
+			if("0".equals(dis_type)) {
+				System.out.print("无促销,");
+			} else if("1".equals(dis_type)) {
+				System.out.print("满额促销,");
+			} else if("2".equals(dis_type)) {
+				System.out.print("限量促销,");
+			} else {
+				System.out.print("赠品,");
+			}
+			
+			//0 爆款 1非爆款
+			if(providerType==0) {
+				System.out.print("爆款,");
+			} else {
+				System.out.print("非爆款,");
+			}
+			System.out.print(stockAvailable+",");
+			System.out.print(stockStatus+",");
+    		System.out.println();
+    	}
 	}
 	
 	
