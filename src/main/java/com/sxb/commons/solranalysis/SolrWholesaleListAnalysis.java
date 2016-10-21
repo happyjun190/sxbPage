@@ -42,7 +42,7 @@ public class SolrWholesaleListAnalysis {
 	private static DataFormatter formatter = null;
 	private static FormulaEvaluator evaluator = null;
 	//private static String solrApi = "http://test.ysbang.cn/ysb/servlet/yaomaimai/caigou/v3/getWholesaleListV3/v3100";
-	private static String solrApi = "http://test.ysbang.cn/ysb/servlet/yaomaimai/caigou/v3/getWholesaleListV3/v313000";
+	private static String solrApi = "http://test.ysbang.cn/ysb/servlet/yaomaimai/caigou/v3/getWholesaleListV3/v3100";
 	
 	public static void main(String[] args) {
 		String filePath = "/home/shenjun/Desktop/7月热词-搜索联想调整结果.xlsx";
@@ -54,7 +54,7 @@ public class SolrWholesaleListAnalysis {
 		paramMap.put("page", 1);
 		paramMap.put("pageNo", 1);
 		paramMap.put("pagesize", 30);
-		paramMap.put("usertoken", "662d78e8ed134dda8dcc6978f283d464");
+		paramMap.put("usertoken", "5e4cccd0086a4c96ab815e74c59f09f5");
     	paramMap.put("authcode", 123456);
 		
 		openWorkbook(filePath);
@@ -66,7 +66,7 @@ public class SolrWholesaleListAnalysis {
 		//获取第一个sheet页数据
 		sheet = workbook.getSheetAt(0);
 		
-		System.out.println("搜索关键字,活动id,药品id,供应商,药品名,规格,单价(unit_price),平均价格(druginfo_price),用户浏览量(uv),页面访问量(pv),销量,促销类型,爆款类型,库存数量,库存状态");
+		System.out.println("搜索关键字,活动id,药品id,供应商,药品名,规格,单价(unit_price),平均价格(druginfo_price),用户浏览量(uv),页面访问量(pv),月销量(近期),促销类型,爆款类型,库存数量,库存状态");
 		//解析行数据
 		if (sheet.getPhysicalNumberOfRows() > 0) {
 			for (int i = 0; i <= sheet.getLastRowNum(); i++) {
@@ -153,7 +153,7 @@ public class SolrWholesaleListAnalysis {
 			druginfo_price = wholesaleMap.get("druginfo_price")!=null?String.valueOf(wholesaleMap.get("druginfo_price")):"~";
 			uv = wholesaleMap.get("uv")!=null?Integer.parseInt(wholesaleMap.get("uv").toString()):0;
 			pv = wholesaleMap.get("pv")!=null?Integer.parseInt(wholesaleMap.get("pv").toString()):0;
-			order_amount = wholesaleMap.get("order_amount")!=null?Integer.parseInt(wholesaleMap.get("order_amount").toString()):0;
+			order_amount = wholesaleMap.get("month_ws")!=null?Integer.parseInt(wholesaleMap.get("month_ws").toString()):0;
 			//dis_type = (String) wholesaleMap.getOrDefault("dis_type","0");
 			dis_type = wholesaleMap.get("dis_type")!=null?wholesaleMap.get("dis_type").toString():"0";
 			providerType = wholesaleMap.get("providerType")!=null?Integer.parseInt(wholesaleMap.get("providerType").toString()):0;
@@ -190,12 +190,8 @@ public class SolrWholesaleListAnalysis {
 			//促销类型(0 无促销  1满额促销 2限量促销 3赠品)
 			if("0".equals(dis_type)) {
 				System.out.print("无促销,");
-			} else if("1".equals(dis_type)) {
-				System.out.print("满额促销,");
-			} else if("2".equals(dis_type)) {
-				System.out.print("限量促销,");
 			} else {
-				System.out.print("赠品,");
+				System.out.print("有促销,");
 			}
 			
 			//0 爆款 1非爆款
