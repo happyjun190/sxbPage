@@ -42,7 +42,7 @@ public class SolrWholesaleListAnalysis {
 	private static DataFormatter formatter = null;
 	private static FormulaEvaluator evaluator = null;
 	//private static String solrApi = "http://test.ysbang.cn/ysb/servlet/yaomaimai/caigou/v3/getWholesaleListV3/v3100";
-	private static String solrApi = "http://test.ysbang.cn/ysb/servlet/yaomaimai/caigou/v3/getWholesaleListV3/v3100";
+	private static String solrApi = "http://apirc.ysbang.cn/ysb/servlet/yaomaimai/caigou/v3/getWholesaleListV3/v3100";
 	
 	public static void main(String[] args) {
 		String filePath = "/home/shenjun/Desktop/7月热词-搜索联想调整结果.xlsx";
@@ -54,7 +54,7 @@ public class SolrWholesaleListAnalysis {
 		paramMap.put("page", 1);
 		paramMap.put("pageNo", 1);
 		paramMap.put("pagesize", 30);
-		paramMap.put("usertoken", "5e4cccd0086a4c96ab815e74c59f09f5");
+		paramMap.put("usertoken", "7f34bf9b75c440f09ab4e7aad87aa604");
     	paramMap.put("authcode", 123456);
 		
 		openWorkbook(filePath);
@@ -189,9 +189,9 @@ public class SolrWholesaleListAnalysis {
 			System.out.print(order_amount+",");
 			//促销类型(0 无促销  1满额促销 2限量促销 3赠品)
 			if("0".equals(dis_type)) {
-				System.out.print("无促销,");
+				System.out.print("无促销"+dis_type+",");
 			} else {
-				System.out.print("有促销,");
+				System.out.print("有促销"+dis_type+",");
 			}
 			
 			//0 爆款 1非爆款
